@@ -1,0 +1,18 @@
+apiVersion: v2
+name: homepage
+description: A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
+type: application
+version: 1.7.0
+appVersion: "v1.7.0"
+keywords:
+  - homepage
+  - dashboard
+  - docker
+  - kubernetes
+  - services
+home: https://github.com/gethomepage/homepage
+sources:
+  - https://github.com/gethomepage/homepage
+maintainers:
+  - name: UnknownIQ
+icon: https://github.com/gethomepage/homepage/raw/main/public/homepage.png

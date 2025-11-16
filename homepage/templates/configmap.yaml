@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "homepage.fullname" . }}
+  labels:
+    {{- include "homepage.labels" . | nindent 4 }}
+data:
+  bookmarks.yaml: |
+    {{- if .Values.config.bookmarks }}
+    {{- toYaml .Values.config.bookmarks | nindent 4 }}
+    {{- else }}
+    []
+    {{- end }}
+  services.yaml: |
+    {{- if .Values.config.services }}
+    {{- toYaml .Values.config.services | nindent 4 }}
+    {{- else }}
+    []
+    {{- end }}
+  widgets.yaml: |
+    {{- if .Values.config.widgets }}
+    {{- toYaml .Values.config.widgets | nindent 4 }}
+    {{- else }}
+    []
+    {{- end }}
+  {{- if .Values.config.kubernetes }}
+  kubernetes.yaml: |
+    {{- toYaml .Values.config.kubernetes | nindent 4 }}
+  {{- end }}
+  docker.yaml: |
+    {{- if .Values.config.docker }}
+    {{- toYaml .Values.config.docker | nindent 4 }}
+    {{- else }}
+    {}
+    {{- end }}
+  settings.yaml: |
+    {{- if .Values.config.settings }}
+    {{- toYaml .Values.config.settings | nindent 4 }}
+    {{- else }}
+    {}
+    {{- end }}
+---
+{{- if or .Values.customCss .Values.customJs }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "homepage.fullname" . }}-custom
+  labels:
+    {{- include "homepage.labels" . | nindent 4 }}
+data:
+  {{- if .Values.customCss }}
+  custom.css: |
+    {{- .Values.customCss | nindent 4 }}
+  {{- end }}
+  {{- if .Values.customJs }}
+  custom.js: |
+    {{- .Values.customJs | nindent 4 }}
+  {{- end }}
+{{- end }}
