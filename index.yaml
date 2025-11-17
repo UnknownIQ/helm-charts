@@ -3,6 +3,30 @@ entries:
   homepage:
   - apiVersion: v2
     appVersion: v1.7.0
+    created: "2025-11-17T22:04:46.720933003Z"
+    description: A modern, fully static, fast, secure fully proxied, highly customizable
+      application dashboard with integrations for over 100 services and translations
+      into multiple languages.
+    digest: 262accebde963b36f7cbd3adc5ca27516e07904551e684cdced08627a16c256d
+    home: https://github.com/gethomepage/homepage
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
+    keywords:
+    - homepage
+    - dashboard
+    - docker
+    - kubernetes
+    - services
+    maintainers:
+    - name: UnknownIQ
+    name: homepage
+    sources:
+    - https://github.com/gethomepage/homepage
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.8.0/homepage-1.8.0.tgz
+    version: 1.8.0
+  - apiVersion: v2
+    appVersion: v1.7.0
     created: "2025-11-17T00:17:05.621292377Z"
     description: A modern, fully static, fast, secure fully proxied, highly customizable
       application dashboard with integrations for over 100 services and translations
@@ -101,4 +125,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2025-11-17T21:59:44.165853941Z"
+generated: "2025-11-17T22:04:46.720951257Z"
