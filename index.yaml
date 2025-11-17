@@ -3,6 +3,30 @@ entries:
   homepage:
   - apiVersion: v2
     appVersion: v1.7.0
+    created: "2025-11-17T00:11:12.839316634Z"
+    description: A modern, fully static, fast, secure fully proxied, highly customizable
+      application dashboard with integrations for over 100 services and translations
+      into multiple languages.
+    digest: 844b568d6e97c7347f0f9d3dc416da4c5fc60eaea428aba3820f4da91ccbd64a
+    home: https://github.com/gethomepage/homepage
+    icon: https://github.com/gethomepage/homepage/raw/main/public/homepage.png
+    keywords:
+    - homepage
+    - dashboard
+    - docker
+    - kubernetes
+    - services
+    maintainers:
+    - name: UnknownIQ
+    name: homepage
+    sources:
+    - https://github.com/gethomepage/homepage
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.7.2/homepage-1.7.2.tgz
+    version: 1.7.2
+  - apiVersion: v2
+    appVersion: v1.7.0
     created: "2025-11-16T23:50:16.356473577Z"
     description: A modern, fully static, fast, secure fully proxied, highly customizable
       application dashboard with integrations for over 100 services and translations
@@ -25,4 +49,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.7.1/homepage-1.7.1.tgz
     version: 1.7.1
-generated: "2025-11-16T23:50:16.356479488Z"
+generated: "2025-11-17T00:11:12.839327574Z"
