@@ -1,0 +1,22 @@
+apiVersion: v2
+name: searxng
+description: A privacy-respecting, hackable metasearch engine that aggregates results from various search services without tracking users.
+type: application
+version: 0.1.0
+appVersion: "latest"
+keywords:
+  - searxng
+  - search
+  - metasearch
+  - privacy
+home: https://github.com/searxng/searxng
+sources:
+  - https://github.com/searxng/searxng
+maintainers:
+  - name: UnknownIQ
+icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
+dependencies:
+  - name: valkey
+    version: "0.7.1"
+    repository: https://valkey.io/valkey-helm/
+    condition: valkey.enabled

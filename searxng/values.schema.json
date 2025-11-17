@@ -1,0 +1,547 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of replicas for the SearXNG deployment"
+    },
+    "revisionHistoryLimit": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of old ReplicaSets to retain for rollback"
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "SearXNG image repository"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"],
+          "description": "Image pull policy"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Overrides the image tag (default is chart appVersion)"
+        }
+      },
+      "required": ["repository", "pullPolicy"]
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Image pull secrets"
+    },
+    "nameOverride": {
+      "type": "string",
+      "description": "Override the name of the chart"
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override the fullname of the chart"
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "description": "Specifies whether a service account should be created"
+        },
+        "automount": {
+          "type": "boolean",
+          "description": "Automatically mount a ServiceAccount's API credentials"
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Annotations to add to the service account"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the service account to use"
+        }
+      }
+    },
+    "podAnnotations": {
+      "type": "object",
+      "description": "Annotations to add to the pod"
+    },
+    "podLabels": {
+      "type": "object",
+      "description": "Labels to add to the pod"
+    },
+    "deploymentAnnotations": {
+      "type": "object",
+      "description": "Annotations to add to the deployment"
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "description": "Security context for the pod"
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Security context for the container"
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+          "description": "Kubernetes service type"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "Service port"
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Service annotations"
+        }
+      },
+      "required": ["type", "port"]
+    },
+    "route": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable Gateway API HTTPRoute"
+        },
+        "annotations": {
+          "type": "object",
+          "description": "HTTPRoute annotations"
+        },
+        "parentRefs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Gateway parent references"
+        },
+        "hostnames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Hostnames for the route"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Route rules"
+        }
+      },
+      "description": "Gateway API HTTPRoute configuration"
+    },
+    "env": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Additional environment variables"
+    },
+    "volumeMounts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Additional volume mounts"
+    },
+    "volumes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Additional volumes"
+    },
+    "ingress": {
+      "type": "object",
+      "properties": {
+        "main": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable ingress"
+            },
+            "className": {
+              "type": "string",
+              "description": "Ingress class name"
+            },
+            "annotations": {
+              "type": "object",
+              "description": "Ingress annotations"
+            },
+            "hosts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "host": {
+                    "type": "string",
+                    "description": "Hostname"
+                  },
+                  "paths": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "description": "Path"
+                        },
+                        "pathType": {
+                          "type": "string",
+                          "enum": ["Exact", "Prefix", "ImplementationSpecific"],
+                          "description": "Path type"
+                        }
+                      },
+                      "required": ["path", "pathType"]
+                    }
+                  }
+                },
+                "required": ["host", "paths"]
+              }
+            },
+            "tls": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "TLS configuration"
+            }
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "description": "Resource limits and requests"
+    },
+    "autoscaling": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable autoscaling"
+        },
+        "minReplicas": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Minimum number of replicas"
+        },
+        "maxReplicas": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of replicas"
+        },
+        "targetCPUUtilizationPercentage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Target CPU utilization percentage"
+        },
+        "targetMemoryUtilizationPercentage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Target memory utilization percentage"
+        }
+      }
+    },
+    "podDisruptionBudget": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable PodDisruptionBudget"
+        },
+        "minAvailable": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Minimum number of pods that must be available"
+        }
+      },
+      "description": "PodDisruptionBudget configuration"
+    },
+    "networkPolicy": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable NetworkPolicy"
+        },
+        "ingress": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Ingress rules"
+        },
+        "egress": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Egress rules"
+        },
+        "egressDNS": {
+          "type": "boolean",
+          "description": "Allow DNS egress"
+        }
+      },
+      "description": "NetworkPolicy configuration"
+    },
+    "serviceMonitor": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable ServiceMonitor for Prometheus"
+        },
+        "interval": {
+          "type": "string",
+          "description": "Scrape interval"
+        },
+        "scrapeTimeout": {
+          "type": "string",
+          "description": "Scrape timeout"
+        },
+        "labels": {
+          "type": "object",
+          "description": "Additional labels"
+        },
+        "honorLabels": {
+          "type": "boolean",
+          "description": "Honor labels from the service"
+        },
+        "basicAuth": {
+          "type": "object",
+          "properties": {
+            "password": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Secret name containing password"
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Key in secret containing password"
+                }
+              }
+            },
+            "username": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Secret name containing username"
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Key in secret containing username"
+                }
+              }
+            }
+          },
+          "description": "Basic auth configuration for metrics endpoint"
+        }
+      },
+      "description": "Prometheus ServiceMonitor configuration"
+    },
+    "nodeSelector": {
+      "type": "object",
+      "description": "Node selector"
+    },
+    "tolerations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Tolerations"
+    },
+    "affinity": {
+      "type": "object",
+      "description": "Affinity rules"
+    },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable persistent storage for config"
+            },
+            "accessMode": {
+              "type": "string",
+              "enum": ["ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany"],
+              "description": "Access mode"
+            },
+            "size": {
+              "type": "string",
+              "pattern": "^[0-9]+(\\.[0-9]+)?(Ki|Mi|Gi|Ti|Pi|Ei|K|M|G|T|P|E)$",
+              "description": "Storage size"
+            },
+            "storageClass": {
+              "type": "string",
+              "description": "Storage class name"
+            }
+          }
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "general": {
+          "type": "object",
+          "properties": {
+            "instance_name": {
+              "type": "string",
+              "description": "Instance name displayed in the UI"
+            },
+            "enable_metrics": {
+              "type": "boolean",
+              "description": "Enable metrics endpoint"
+            },
+            "open_metrics": {
+              "type": "string",
+              "description": "Secret password to expose Prometheus OpenMetrics API at /metrics"
+            }
+          }
+        },
+        "search": {
+          "type": "object",
+          "properties": {
+            "safe_search": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2,
+              "description": "Safe search level (0=off, 1=moderate, 2=strict)"
+            },
+            "autocomplete": {
+              "type": "string",
+              "description": "Autocomplete provider"
+            },
+            "ban_time_on_fail": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Ban time in seconds on search failure"
+            },
+            "max_ban_time_on_fail": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Maximum ban time in seconds"
+            }
+          }
+        },
+        "server": {
+          "type": "object",
+          "properties": {
+            "secret_key": {
+              "type": "string",
+              "description": "Secret key for session encryption (auto-generated if empty)"
+            },
+            "limiter": {
+              "type": "boolean",
+              "description": "Enable rate limiting (requires Valkey)"
+            },
+            "public_instance": {
+              "type": "boolean",
+              "description": "Enable public instance mode"
+            },
+            "image_proxy": {
+              "type": "boolean",
+              "description": "Enable image proxy"
+            },
+            "method": {
+              "type": "string",
+              "enum": ["GET", "POST"],
+              "description": "Default HTTP method for search"
+            },
+            "base_url": {
+              "oneOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string",
+                  "format": "uri"
+                }
+              ],
+              "description": "Base URL for the instance"
+            }
+          }
+        },
+        "ui": {
+          "type": "object",
+          "properties": {
+            "default_theme": {
+              "type": "string",
+              "description": "Default UI theme"
+            },
+            "center_alignment": {
+              "type": "boolean",
+              "description": "Enable center alignment"
+            },
+            "infinite_scroll": {
+              "type": "boolean",
+              "description": "Enable infinite scroll"
+            },
+            "query_in_title": {
+              "type": "boolean",
+              "description": "Show query in page title"
+            },
+            "default_locale": {
+              "type": "string",
+              "description": "Default locale"
+            }
+          }
+        },
+        "engines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Engine name"
+              },
+              "disabled": {
+                "type": "boolean",
+                "description": "Disable this engine"
+              }
+            },
+            "required": ["name"]
+          },
+          "description": "Search engines configuration"
+        }
+      },
+      "required": ["general", "search", "server", "ui"]
+    },
+    "valkey": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable Valkey dependency for rate limiting"
+        }
+      },
+      "description": "Valkey (Redis alternative) configuration"
+    }
+  },
+  "required": ["replicaCount", "image", "service", "config"]
+}

@@ -1,0 +1,176 @@
+replicaCount: 1
+revisionHistoryLimit: 3
+
+image:
+  repository: searxng/searxng
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+deploymentAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 977
+  runAsGroup: 977
+  fsGroup: 977
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+
+ingress:
+  main:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: searxng.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+
+# Gateway API HTTPRoute
+route:
+  enabled: false
+  annotations: {}
+  # Gateway parent references
+  parentRefs:
+    - name: gateway
+      namespace: default
+      sectionName: https
+  # Hostnames for the route
+  hostnames:
+    - searxng.local
+  # Route rules
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+# Environment variables
+env: []
+
+# SearXNG Configuration
+config:
+  general:
+    instance_name: "SearXNG"
+    enable_metrics: true
+    open_metrics: ""  # Set to a secret password to expose Prometheus metrics at /metrics
+
+  search:
+    safe_search: 0
+    autocomplete: ""
+    ban_time_on_fail: 5
+    max_ban_time_on_fail: 120
+
+  server:
+    secret_key: ""  # Auto-generated if empty
+    limiter: false  # Auto-enabled when valkey.enabled=true
+    public_instance: false
+    image_proxy: false
+    method: "POST"
+    base_url: false  # Set to your public URL if needed
+
+  ui:
+    default_theme: simple
+    center_alignment: false
+    infinite_scroll: false
+    query_in_title: false
+    default_locale: ""
+
+  # Search engines to enable (minimal set by default)
+  engines:
+    - name: duckduckgo
+      disabled: false
+    - name: google
+      disabled: false
+    - name: wikipedia
+      disabled: false
+    - name: github
+      disabled: false
+    - name: stackoverflow
+      disabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+
+networkPolicy:
+  enabled: false
+  ingress: []
+  egress: []
+  egressDNS: true
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {}
+  honorLabels: false
+  # Basic auth for /metrics endpoint (requires config.general.open_metrics to be set)
+  basicAuth: {}
+    # password:
+    #   name: searxng-metrics-secret
+    #   key: password
+    # username:
+    #   name: searxng-metrics-secret
+    #   key: username
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Persistence for config directory
+persistence:
+  config:
+    enabled: false
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    # storageClass: ""
+
+volumeMounts: []
+volumes: []
+
+# Valkey (Redis alternative) for rate limiting support
+valkey:
+  enabled: false
+  # Valkey chart configuration
+  master:
+    persistence:
+      enabled: true
+      size: 1Gi

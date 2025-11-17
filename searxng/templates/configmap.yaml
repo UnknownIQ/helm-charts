@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "searxng.fullname" . }}
+  labels:
+    {{- include "searxng.labels" . | nindent 4 }}
+data:
+  settings.yml: |
+    general:
+      debug: false
+      instance_name: {{ .Values.config.general.instance_name | quote }}
+      enable_metrics: {{ .Values.config.general.enable_metrics }}
+      {{- if .Values.config.general.open_metrics }}
+      open_metrics: {{ .Values.config.general.open_metrics | quote }}
+      {{- end }}
+
+    brand:
+      new_issue_url: https://github.com/searxng/searxng/issues/new
+      docs_url: https://docs.searxng.org/
+      public_instances: https://searx.space
+      wiki_url: https://github.com/searxng/searxng/wiki
+
+    search:
+      safe_search: {{ .Values.config.search.safe_search }}
+      autocomplete: {{ .Values.config.search.autocomplete | quote }}
+      ban_time_on_fail: {{ .Values.config.search.ban_time_on_fail }}
+      max_ban_time_on_fail: {{ .Values.config.search.max_ban_time_on_fail }}
+      formats:
+        - html
+
+    server:
+      port: 8080
+      bind_address: "0.0.0.0"
+      {{- if .Values.config.server.base_url }}
+      base_url: {{ .Values.config.server.base_url | quote }}
+      {{- else }}
+      base_url: false
+      {{- end }}
+      limiter: {{ .Values.valkey.enabled }}
+      public_instance: {{ .Values.config.server.public_instance }}
+      secret_key: {{ include "searxng.secretKey" . | quote }}
+      image_proxy: {{ .Values.config.server.image_proxy }}
+      method: {{ .Values.config.server.method | quote }}
+
+    valkey:
+      url: {{ include "searxng.valkeyUrl" . }}
+
+    ui:
+      default_theme: {{ .Values.config.ui.default_theme | quote }}
+      center_alignment: {{ .Values.config.ui.center_alignment }}
+      infinite_scroll: {{ .Values.config.ui.infinite_scroll }}
+      query_in_title: {{ .Values.config.ui.query_in_title }}
+      {{- if .Values.config.ui.default_locale }}
+      default_locale: {{ .Values.config.ui.default_locale | quote }}
+      {{- else }}
+      default_locale: ""
+      {{- end }}
+
+    outgoing:
+      request_timeout: 3.0
+      useragent_suffix: ""
+      pool_connections: 100
+      pool_maxsize: 20
+      enable_http2: true
+
+    engines:
+      - name: duckduckgo
+        engine: duckduckgo
+        shortcut: ddg
+        {{- $ddg := (index .Values.config.engines 0) }}
+        {{- if $ddg }}
+        disabled: {{ $ddg.disabled | default false }}
+        {{- end }}
+
+      - name: google
+        engine: google
+        shortcut: go
+        {{- $google := (index .Values.config.engines 1) }}
+        {{- if $google }}
+        disabled: {{ $google.disabled | default false }}
+        {{- end }}
+
+      - name: wikipedia
+        engine: wikipedia
+        shortcut: wp
+        display_type: ["infobox"]
+        {{- $wiki := (index .Values.config.engines 2) }}
+        {{- if $wiki }}
+        disabled: {{ $wiki.disabled | default false }}
+        {{- end }}
+
+      - name: github
+        engine: github
+        shortcut: gh
+        {{- $github := (index .Values.config.engines 3) }}
+        {{- if $github }}
+        disabled: {{ $github.disabled | default false }}
+        {{- end }}
+
+      - name: stackoverflow
+        engine: stackexchange
+        shortcut: st
+        api_site: 'stackoverflow'
+        categories: [it, q&a]
+        {{- $so := (index .Values.config.engines 4) }}
+        {{- if $so }}
+        disabled: {{ $so.disabled | default false }}
+        {{- end }}
+
+    doi_resolvers:
+      oadoi.org: 'https://oadoi.org/'
+      doi.org: 'https://doi.org/'
+
+    default_doi_resolver: 'oadoi.org'
