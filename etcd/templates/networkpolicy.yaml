@@ -1,0 +1,57 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "etcd.fullname" . }}
+  labels:
+    {{- include "etcd.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "etcd.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow client traffic (2379) from any pod in namespace
+    - ports:
+        - protocol: TCP
+          port: {{ .Values.service.clientPort }}
+    # Allow peer traffic (2380) only from etcd pods
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- include "etcd.selectorLabels" . | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.service.peerPort }}
+    {{- with .Values.networkPolicy.ingress }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  egress:
+    # Allow peer communication
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- include "etcd.selectorLabels" . | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.service.peerPort }}
+    {{- if .Values.networkPolicy.egressDNS }}
+    # Allow DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+    {{- end }}
+    # Allow HTTPS for S3 backups
+    - ports:
+        - protocol: TCP
+          port: 443
+    {{- with .Values.networkPolicy.egress }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}

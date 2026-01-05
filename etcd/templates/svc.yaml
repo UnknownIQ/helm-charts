@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "etcd.fullname" . }}
+  labels:
+    {{- include "etcd.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: client
+    port: {{ .Values.service.clientPort }}
+    targetPort: client
+    protocol: TCP
+  selector:
+    {{- include "etcd.selectorLabels" . | nindent 4 }}

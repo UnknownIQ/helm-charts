@@ -1,0 +1,315 @@
+# Default values for etcd.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## @section Global parameters
+
+## @param replicaCount Number of etcd replicas (must be odd: 1, 3, 5, 7, etc.)
+replicaCount: 3
+
+## @param revisionHistoryLimit Number of old ReplicaSets to retain
+revisionHistoryLimit: 3
+
+## @section Image parameters
+
+## @param image.registry etcd image registry
+## @param image.repository etcd image repository
+## @param image.tag etcd image tag (immutable tags are recommended). Defaults to chart appVersion
+## @param image.pullPolicy etcd image pull policy
+##
+image:
+  registry: gcr.io
+  repository: etcd-development/etcd
+  tag: ""
+  pullPolicy: IfNotPresent
+
+## @param imagePullSecrets Specify docker-registry secret names as an array
+##
+imagePullSecrets: []
+
+## @param nameOverride String to partially override etcd.fullname template
+##
+nameOverride: ""
+
+## @param fullnameOverride String to fully override etcd.fullname template
+##
+fullnameOverride: ""
+
+## @section Service Account parameters
+
+## @param serviceAccount.create Enable creation of ServiceAccount for etcd pod
+## @param serviceAccount.automount Allows auto mount of ServiceAccountToken on the serviceAccount created
+## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+## @param serviceAccount.name The name of the ServiceAccount to use
+##
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+## @section Security Context parameters
+
+## @param podSecurityContext.runAsNonRoot Set etcd pod's Security Context runAsNonRoot
+## @param podSecurityContext.runAsUser Set etcd pod's Security Context runAsUser
+## @param podSecurityContext.runAsGroup Set etcd pod's Security Context runAsGroup
+## @param podSecurityContext.fsGroup Set etcd pod's Security Context fsGroup
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+##
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+  fsGroupChangePolicy: "OnRootMismatch"
+
+## @param securityContext.allowPrivilegeEscalation Set etcd container's Security Context allowPrivilegeEscalation
+## @param securityContext.capabilities.drop List of capabilities to be dropped
+## @param securityContext.readOnlyRootFilesystem Set etcd container's Security Context readOnlyRootFilesystem
+##
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+
+## @section Service parameters
+
+## @param service.type Kubernetes Service type
+## @param service.clientPort etcd client port
+## @param service.peerPort etcd peer port
+## @param service.annotations Additional custom annotations for etcd service
+##
+service:
+  type: ClusterIP
+  clientPort: 2379
+  peerPort: 2380
+  annotations: {}
+
+## @section etcd Configuration parameters
+
+## @param etcd.initialClusterToken Initial cluster token for the etcd cluster
+## @param etcd.autoCompactionMode Auto compaction mode (periodic or revision)
+## @param etcd.autoCompactionRetention Auto compaction retention (1h for periodic, number for revision)
+## @param etcd.snapshotCount Number of committed transactions to trigger a snapshot
+## @param etcd.quotaBackendBytes Backend size quota in bytes (default 2GB)
+## @param etcd.heartbeatInterval Time (in milliseconds) of a heartbeat interval
+## @param etcd.electionTimeout Time (in milliseconds) for an election to timeout
+## @param etcd.initialClusterState Initial cluster state ('new' or 'existing')
+## @param etcd.logLevel Log level (debug, info, warn, error, panic, fatal)
+##
+etcd:
+  initialClusterToken: ""
+  autoCompactionMode: "periodic"
+  autoCompactionRetention: "1h"
+  snapshotCount: 10000
+  quotaBackendBytes: "2147483648"
+  heartbeatInterval: 100
+  electionTimeout: 1000
+  initialClusterState: "new"
+  logLevel: "info"
+
+## @section TLS Configuration parameters
+
+## @param tls.enabled Enable TLS for client and peer communication
+##
+tls:
+  enabled: false
+
+  ## @param tls.client.existingSecret Name of existing secret containing client TLS certificates
+  ## @param tls.client.certFilename Certificate filename in the secret
+  ## @param tls.client.keyFilename Key filename in the secret
+  ## @param tls.client.caFilename CA certificate filename in the secret
+  ##
+  client:
+    existingSecret: ""
+    certFilename: "tls.crt"
+    keyFilename: "tls.key"
+    caFilename: "ca.crt"
+
+  ## @param tls.peer.existingSecret Name of existing secret containing peer TLS certificates
+  ## @param tls.peer.certFilename Certificate filename in the secret
+  ## @param tls.peer.keyFilename Key filename in the secret
+  ## @param tls.peer.caFilename CA certificate filename in the secret
+  ##
+  peer:
+    existingSecret: ""
+    certFilename: "tls.crt"
+    keyFilename: "tls.key"
+    caFilename: "ca.crt"
+
+## @section Authentication parameters
+
+## @param auth.enabled Enable authentication for etcd
+## @param auth.rootPassword Root user password (auto-generated if empty)
+## @param auth.existingSecret Name of existing secret containing root password
+##
+auth:
+  enabled: false
+  rootPassword: ""
+  existingSecret: ""
+
+## @section S3 Backup Configuration parameters
+
+## @param backup.enabled Enable automated S3 backups
+## @param backup.schedule Cron schedule for backups (default: every 6 hours)
+##
+backup:
+  enabled: true
+  schedule: "0 */6 * * *"
+
+  ## @param backup.retention.days Number of daily backups to retain
+  ## @param backup.retention.weeks Number of weekly backups to retain
+  ## @param backup.retention.months Number of monthly backups to retain
+  ##
+  retention:
+    days: 7
+    weeks: 4
+    months: 3
+
+  ## @param backup.s3.bucket S3 bucket name for backups (required if backup.enabled=true)
+  ## @param backup.s3.prefix Prefix for backup files in S3 bucket
+  ## @param backup.s3.region AWS region
+  ## @param backup.s3.endpoint Custom S3 endpoint for S3-compatible storage (MinIO, Backblaze, etc.)
+  ## @param backup.s3.accessKey AWS access key ID
+  ## @param backup.s3.secretKey AWS secret access key
+  ## @param backup.s3.existingSecret Name of existing secret containing S3 credentials
+  ##
+  s3:
+    bucket: ""
+    prefix: "etcd-backups"
+    region: "us-east-1"
+    endpoint: ""
+    accessKey: ""
+    secretKey: ""
+    existingSecret: ""
+
+  ## @param backup.resources.requests.cpu CPU resource requests for backup job
+  ## @param backup.resources.requests.memory Memory resource requests for backup job
+  ## @param backup.resources.limits.cpu CPU resource limits for backup job
+  ## @param backup.resources.limits.memory Memory resource limits for backup job
+  ##
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+## @section Defragmentation Configuration parameters
+
+## @param defrag.enabled Enable automated defragmentation
+## @param defrag.schedule Cron schedule for defragmentation (default: weekly)
+##
+defrag:
+  enabled: true
+  schedule: "0 0 * * 0"
+
+  ## @param defrag.resources.requests.cpu CPU resource requests for defrag job
+  ## @param defrag.resources.requests.memory Memory resource requests for defrag job
+  ##
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+## @section Persistence parameters
+
+## @param persistence.enabled Enable persistence using PVC
+## @param persistence.storageClass PVC Storage Class for etcd data volume
+## @param persistence.accessMode PVC Access Mode for etcd data volume
+## @param persistence.size PVC Storage Request for etcd data volume
+## @param persistence.annotations Annotations for the PVC
+##
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+
+## @section PodDisruptionBudget parameters
+
+## @param podDisruptionBudget.enabled Enable PodDisruptionBudget
+## @param podDisruptionBudget.minAvailable Minimum number of pods that must be available
+##
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+## @section Monitoring parameters
+
+## @param serviceMonitor.enabled Create ServiceMonitor resource for Prometheus Operator
+## @param serviceMonitor.interval Interval at which metrics should be scraped
+## @param serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+## @param serviceMonitor.labels Additional labels for ServiceMonitor
+## @param serviceMonitor.honorLabels Chooses the metric's labels on collisions with target labels
+##
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  labels: {}
+  honorLabels: false
+
+## @section Network Policy parameters
+
+## @param networkPolicy.enabled Enable NetworkPolicy
+## @param networkPolicy.ingress Custom ingress rules
+## @param networkPolicy.egress Custom egress rules
+## @param networkPolicy.egressDNS Allow DNS egress traffic
+##
+networkPolicy:
+  enabled: false
+  ingress: []
+  egress: []
+  egressDNS: true
+
+## @section Resource parameters
+
+## @param resources.requests.cpu CPU resource requests for etcd container
+## @param resources.requests.memory Memory resource requests for etcd container
+## @param resources.limits.cpu CPU resource limits for etcd container
+## @param resources.limits.memory Memory resource limits for etcd container
+##
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+
+## @section Pod placement parameters
+
+## @param nodeSelector Node labels for pod assignment
+##
+nodeSelector: {}
+
+## @param tolerations Tolerations for pod assignment
+##
+tolerations: []
+
+## @param affinity Affinity for pod assignment (defaults to anti-affinity)
+##
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: etcd
+        topologyKey: kubernetes.io/hostname
+
+## @section Additional parameters
+
+## @param podAnnotations Additional annotations for etcd pods
+##
+podAnnotations: {}
+
+## @param podLabels Additional labels for etcd pods
+##
+podLabels: {}

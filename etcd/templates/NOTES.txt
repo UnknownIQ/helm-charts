@@ -1,0 +1,118 @@
+{{- if .Values.tls.enabled }}
+*** etcd cluster deployed with TLS enabled ***
+{{- else }}
+################################################################################
+###   WARNING: etcd cluster deployed WITHOUT TLS                             ###
+###                                                                            ###
+###   TLS is DISABLED. This is not recommended for production use.            ###
+###   Enable TLS by setting tls.enabled=true and providing certificates.      ###
+################################################################################
+{{- end }}
+
+Your etcd cluster has been deployed!
+
+1. Get the etcd client endpoints:
+
+   {{- $fullname := include "etcd.fullname" . }}
+   {{- $protocol := include "etcd.clientProtocol" . }}
+   {{- $replicaCount := int .Values.replicaCount }}
+   {{- $clientPort := int .Values.service.clientPort }}
+   {{- range $i := until $replicaCount }}
+   {{ $protocol }}://{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless:{{ $clientPort }}
+   {{- end }}
+
+   Or use the client service:
+   {{ $protocol }}://{{ include "etcd.fullname" . }}:{{ .Values.service.clientPort }}
+
+2. Connect to etcd from within the cluster:
+
+   kubectl run etcd-client --rm -it --restart=Never \
+     --image={{ include "etcd.image" . }} \
+     -- /bin/sh
+
+   Then inside the pod:
+   {{- if .Values.tls.enabled }}
+   # With TLS enabled, you need to mount certificates
+   # See the documentation for TLS client setup
+   {{- else }}
+   export ETCDCTL_API=3
+   export ETCDCTL_ENDPOINTS={{ include "etcd.clientEndpoints" . }}
+
+   # Put a key
+   etcdctl put foo bar
+
+   # Get the key
+   etcdctl get foo
+
+   # List cluster members
+   etcdctl member list
+   {{- end }}
+
+{{- if .Values.backup.enabled }}
+
+3. S3 Backup Status:
+
+   Bucket: {{ .Values.backup.s3.bucket }}
+   Prefix: {{ .Values.backup.s3.prefix }}
+   Schedule: {{ .Values.backup.schedule }}
+   {{- if .Values.backup.s3.endpoint }}
+   Endpoint: {{ .Values.backup.s3.endpoint }} (S3-compatible storage)
+   {{- end }}
+
+   Check backup CronJob:
+   kubectl get cronjob {{ include "etcd.fullname" . }}-backup
+
+   View recent backup jobs:
+   kubectl get jobs -l app.kubernetes.io/component=backup,app.kubernetes.io/instance={{ .Release.Name }}
+
+   View backup logs:
+   kubectl logs -l app.kubernetes.io/component=backup,app.kubernetes.io/instance={{ .Release.Name }} --tail=100
+{{- else }}
+
+3. WARNING: S3 backups are DISABLED
+
+   Backups are critical for production etcd clusters. Enable backups by setting:
+   backup.enabled=true
+   backup.s3.bucket=your-bucket-name
+   backup.s3.accessKey=your-access-key
+   backup.s3.secretKey=your-secret-key
+{{- end }}
+
+4. Monitor cluster health:
+
+   kubectl exec {{ include "etcd.fullname" . }}-0 -- etcdctl endpoint health
+   kubectl exec {{ include "etcd.fullname" . }}-0 -- etcdctl endpoint status --write-out=table
+
+{{- if .Values.defrag.enabled }}
+
+5. Defragmentation:
+
+   Automatic defragmentation is enabled ({{ .Values.defrag.schedule }})
+   CronJob: {{ include "etcd.fullname" . }}-defrag
+{{- end }}
+
+{{- if .Values.serviceMonitor.enabled }}
+
+6. Prometheus Monitoring:
+
+   ServiceMonitor created: {{ include "etcd.fullname" . }}
+   Metrics endpoint: /metrics on port {{ .Values.service.clientPort }}
+{{- end }}
+
+7. Useful Commands:
+
+   # Scale the cluster (always use odd numbers: 3, 5, 7)
+   kubectl scale statefulset {{ include "etcd.fullname" . }} --replicas=5
+
+   # Check pod status
+   kubectl get pods -l app.kubernetes.io/name={{ include "etcd.name" . }}
+
+   # View logs
+   kubectl logs -l app.kubernetes.io/name={{ include "etcd.name" . }} --tail=100
+
+   # Check cluster quorum
+   kubectl exec {{ include "etcd.fullname" . }}-0 -- etcdctl member list -w table
+
+For more information, visit:
+- etcd Documentation: https://etcd.io/docs/
+- Chart Repository: {{ index .Chart.Sources 0 }}

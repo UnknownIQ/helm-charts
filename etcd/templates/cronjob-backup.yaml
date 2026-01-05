@@ -1,0 +1,97 @@
+{{- if .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "etcd.fullname" . }}-backup
+  labels:
+    {{- include "etcd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backup
+spec:
+  schedule: {{ .Values.backup.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "etcd.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: backup
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "etcd.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: backup
+        spec:
+          serviceAccountName: {{ include "etcd.serviceAccountName" . }}
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+          containers:
+          - name: etcd-backup
+            image: {{ include "etcd.image" . }}
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command: ["/bin/sh", "/scripts/backup.sh"]
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              readOnlyRootFilesystem: false
+            env:
+            - name: ETCD_ENDPOINTS
+              value: {{ printf "%s://%s-0.%s-headless:%d" (include "etcd.clientProtocol" .) (include "etcd.fullname" .) (include "etcd.fullname" .) (int .Values.service.clientPort) }}
+            - name: ETCD_TLS_ENABLED
+              value: {{ .Values.tls.enabled | quote }}
+            - name: S3_BUCKET
+              value: {{ .Values.backup.s3.bucket | required "backup.s3.bucket is required when backup is enabled" | quote }}
+            - name: S3_PREFIX
+              value: {{ .Values.backup.s3.prefix | quote }}
+            - name: AWS_REGION
+              value: {{ .Values.backup.s3.region | quote }}
+            {{- if .Values.backup.s3.endpoint }}
+            - name: S3_ENDPOINT
+              value: {{ .Values.backup.s3.endpoint | quote }}
+            {{- end }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backup.s3.existingSecret | default (printf "%s-s3" (include "etcd.fullname" .)) }}
+                  key: access-key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backup.s3.existingSecret | default (printf "%s-s3" (include "etcd.fullname" .)) }}
+                  key: secret-key
+            - name: RETENTION_DAYS
+              value: {{ .Values.backup.retention.days | quote }}
+            - name: RETENTION_WEEKS
+              value: {{ .Values.backup.retention.weeks | quote }}
+            - name: RETENTION_MONTHS
+              value: {{ .Values.backup.retention.months | quote }}
+            resources:
+              {{- toYaml .Values.backup.resources | nindent 14 }}
+            volumeMounts:
+            - name: backup-script
+              mountPath: /scripts
+              readOnly: true
+            {{- if .Values.tls.enabled }}
+            - name: tls-client
+              mountPath: /tls/client
+              readOnly: true
+            {{- end }}
+          volumes:
+          - name: backup-script
+            configMap:
+              name: {{ include "etcd.fullname" . }}-backup-script
+              defaultMode: 0755
+          {{- if .Values.tls.enabled }}
+          - name: tls-client
+            secret:
+              secretName: {{ .Values.tls.client.existingSecret | default (printf "%s-client-tls" (include "etcd.fullname" .)) }}
+              defaultMode: 0400
+          {{- end }}
+{{- end }}

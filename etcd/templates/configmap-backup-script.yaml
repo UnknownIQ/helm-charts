@@ -1,0 +1,152 @@
+{{- if .Values.backup.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "etcd.fullname" . }}-backup-script
+  labels:
+    {{- include "etcd.labels" . | nindent 4 }}
+data:
+  backup.sh: |
+    #!/bin/sh
+    set -e
+
+    echo "Starting etcd backup process..."
+
+    # Configuration
+    ETCD_ENDPOINTS="${ETCD_ENDPOINTS}"
+    BACKUP_DIR="/tmp/backup"
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    SNAPSHOT_FILE="${BACKUP_DIR}/etcd-snapshot-${TIMESTAMP}.db"
+    S3_KEY="etcd-snapshot-${TIMESTAMP}.db"
+
+    mkdir -p ${BACKUP_DIR}
+
+    # TLS setup
+    ETCDCTL_OPTS=""
+    if [ "${ETCD_TLS_ENABLED}" = "true" ]; then
+      echo "TLS is enabled, using TLS certificates..."
+      ETCDCTL_OPTS="--cacert=/tls/client/ca.crt --cert=/tls/client/tls.crt --key=/tls/client/tls.key"
+    fi
+
+    # Create snapshot
+    echo "Creating etcd snapshot..."
+    ETCDCTL_API=3 etcdctl \
+      --endpoints=${ETCD_ENDPOINTS} \
+      ${ETCDCTL_OPTS} \
+      snapshot save ${SNAPSHOT_FILE}
+
+    # Verify snapshot
+    echo "Verifying snapshot integrity..."
+    ETCDCTL_API=3 etcdctl snapshot status ${SNAPSHOT_FILE} --write-out=table
+
+    # Upload to S3
+    echo "Uploading snapshot to S3..."
+    S3_PATH="s3://${S3_BUCKET}/${S3_PREFIX}/${S3_KEY}"
+
+    if [ -n "${S3_ENDPOINT}" ]; then
+      echo "Using custom S3 endpoint: ${S3_ENDPOINT}"
+      aws s3 cp ${SNAPSHOT_FILE} ${S3_PATH} \
+        --endpoint-url=${S3_ENDPOINT} \
+        --region=${AWS_REGION}
+    else
+      aws s3 cp ${SNAPSHOT_FILE} ${S3_PATH} \
+        --region=${AWS_REGION}
+    fi
+
+    echo "Snapshot uploaded successfully to ${S3_PATH}"
+
+    # Cleanup local snapshot
+    rm -f ${SNAPSHOT_FILE}
+    echo "Local snapshot cleaned up"
+
+    # Apply retention policy
+    echo "Applying retention policy..."
+    echo "  Keeping last ${RETENTION_DAYS} daily backups"
+    echo "  Keeping last ${RETENTION_WEEKS} weekly backups"
+    echo "  Keeping last ${RETENTION_MONTHS} monthly backups"
+
+    # List all backups
+    if [ -n "${S3_ENDPOINT}" ]; then
+      BACKUP_LIST=$(aws s3 ls s3://${S3_BUCKET}/${S3_PREFIX}/ \
+        --endpoint-url=${S3_ENDPOINT} \
+        --region=${AWS_REGION} | awk '{print $4}' | grep "etcd-snapshot-" || true)
+    else
+      BACKUP_LIST=$(aws s3 ls s3://${S3_BUCKET}/${S3_PREFIX}/ \
+        --region=${AWS_REGION} | awk '{print $4}' | grep "etcd-snapshot-" || true)
+    fi
+
+    if [ -z "$BACKUP_LIST" ]; then
+      echo "No backups found for retention processing"
+    else
+      echo "Found $(echo "$BACKUP_LIST" | wc -l) backup(s)"
+
+      # Sort backups by date (newest first)
+      SORTED_BACKUPS=$(echo "$BACKUP_LIST" | sort -r)
+
+      # Keep daily backups (most recent ones)
+      DAILY_COUNT=0
+      WEEKLY_COUNT=0
+      MONTHLY_COUNT=0
+      CURRENT_DAY=""
+      CURRENT_WEEK=""
+      CURRENT_MONTH=""
+
+      echo "$SORTED_BACKUPS" | while read -r backup_file; do
+        if [ -z "$backup_file" ]; then
+          continue
+        fi
+
+        # Extract date from filename (format: etcd-snapshot-YYYYMMDD_HHMMSS.db)
+        BACKUP_DATE=$(echo "$backup_file" | grep -oE '[0-9]{8}' | head -1)
+        BACKUP_WEEK="${BACKUP_DATE:0:6}"
+        BACKUP_MONTH="${BACKUP_DATE:0:6}"
+
+        KEEP_BACKUP=false
+        REASON=""
+
+        # Daily retention
+        if [ $DAILY_COUNT -lt ${RETENTION_DAYS} ]; then
+          if [ "$BACKUP_DATE" != "$CURRENT_DAY" ]; then
+            KEEP_BACKUP=true
+            REASON="daily"
+            CURRENT_DAY="$BACKUP_DATE"
+            DAILY_COUNT=$((DAILY_COUNT + 1))
+          fi
+        # Weekly retention
+        elif [ $WEEKLY_COUNT -lt ${RETENTION_WEEKS} ]; then
+          if [ "$BACKUP_WEEK" != "$CURRENT_WEEK" ]; then
+            KEEP_BACKUP=true
+            REASON="weekly"
+            CURRENT_WEEK="$BACKUP_WEEK"
+            WEEKLY_COUNT=$((WEEKLY_COUNT + 1))
+          fi
+        # Monthly retention
+        elif [ $MONTHLY_COUNT -lt ${RETENTION_MONTHS} ]; then
+          if [ "$BACKUP_MONTH" != "$CURRENT_MONTH" ]; then
+            KEEP_BACKUP=true
+            REASON="monthly"
+            CURRENT_MONTH="$BACKUP_MONTH"
+            MONTHLY_COUNT=$((MONTHLY_COUNT + 1))
+          fi
+        fi
+
+        if [ "$KEEP_BACKUP" = false ]; then
+          echo "Deleting old backup ($REASON): $backup_file"
+          S3_DELETE_PATH="s3://${S3_BUCKET}/${S3_PREFIX}/${backup_file}"
+          if [ -n "${S3_ENDPOINT}" ]; then
+            aws s3 rm ${S3_DELETE_PATH} \
+              --endpoint-url=${S3_ENDPOINT} \
+              --region=${AWS_REGION}
+          else
+            aws s3 rm ${S3_DELETE_PATH} \
+              --region=${AWS_REGION}
+          fi
+        else
+          echo "Keeping backup ($REASON): $backup_file"
+        fi
+      done
+    fi
+
+    echo "Backup process completed successfully!"
+    exit 0
+{{- end }}

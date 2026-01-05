@@ -1,0 +1,84 @@
+{{- if .Values.defrag.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "etcd.fullname" . }}-defrag
+  labels:
+    {{- include "etcd.labels" . | nindent 4 }}
+    app.kubernetes.io/component: defrag
+spec:
+  schedule: {{ .Values.defrag.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "etcd.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: defrag
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "etcd.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: defrag
+        spec:
+          serviceAccountName: {{ include "etcd.serviceAccountName" . }}
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+          containers:
+          - name: etcd-defrag
+            image: {{ include "etcd.image" . }}
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command:
+            - /bin/sh
+            - -ec
+            - |
+              echo "Starting etcd defragmentation..."
+
+              {{- $fullname := include "etcd.fullname" . }}
+              {{- $protocol := include "etcd.clientProtocol" . }}
+              {{- if .Values.tls.enabled }}
+              ETCDCTL_OPTS="--cacert=/tls/client/{{ .Values.tls.client.caFilename }} --cert=/tls/client/{{ .Values.tls.client.certFilename }} --key=/tls/client/{{ .Values.tls.client.keyFilename }}"
+              {{- else }}
+              ETCDCTL_OPTS=""
+              {{- end }}
+
+              {{- range $i := until (int .Values.replicaCount) }}
+              echo "Defragmenting {{ $fullname }}-{{ $i }}..."
+              ETCDCTL_API=3 etcdctl \
+                --endpoints={{ $protocol }}://{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless:{{ $.Values.service.clientPort }} \
+                ${ETCDCTL_OPTS} \
+                defrag --command-timeout=60s
+
+              echo "Waiting 10 seconds before next member..."
+              sleep 10
+              {{- end }}
+
+              echo "Defragmentation completed for all members!"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              readOnlyRootFilesystem: false
+            resources:
+              {{- toYaml .Values.defrag.resources | nindent 14 }}
+            {{- if .Values.tls.enabled }}
+            volumeMounts:
+            - name: tls-client
+              mountPath: /tls/client
+              readOnly: true
+            {{- end }}
+          {{- if .Values.tls.enabled }}
+          volumes:
+          - name: tls-client
+            secret:
+              secretName: {{ .Values.tls.client.existingSecret | default (printf "%s-client-tls" (include "etcd.fullname" .)) }}
+              defaultMode: 0400
+          {{- end }}
+{{- end }}

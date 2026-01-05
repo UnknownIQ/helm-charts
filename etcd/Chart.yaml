@@ -1,0 +1,19 @@
+apiVersion: v2
+name: etcd
+description: Production-ready etcd cluster with S3 backup support
+type: application
+version: 0.1.0
+appVersion: "v3.5.17"
+keywords:
+  - etcd
+  - database
+  - key-value
+  - distributed
+  - backup
+  - s3
+home: https://etcd.io/
+sources:
+  - https://github.com/etcd-io/etcd
+maintainers:
+  - name: UnknownIQ
+icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg

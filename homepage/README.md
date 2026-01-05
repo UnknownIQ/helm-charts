@@ -1,253 +1,100 @@
-# Homepage Helm Chart
+# homepage
+
+![Version: 1.8.0](https://img.shields.io/badge/Version-1.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.7.0](https://img.shields.io/badge/AppVersion-v1.7.0-informational?style=flat-square)
 
 A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
 
-## Introduction
+**Homepage:** <https://github.com/gethomepage/homepage>
 
-This chart bootstraps a [Homepage](https://github.com/gethomepage/homepage) deployment on a Kubernetes cluster using the Helm package manager.
+## Maintainers
 
-## Prerequisites
+| Name | Email | Url |
+| ---- | ------ | --- |
+| UnknownIQ |  |  |
 
-- Kubernetes 1.19+
-- Helm 3.0+
-- Metrics Server (for Kubernetes widgets)
+## Source Code
 
-## Installing the Chart
+* <https://github.com/gethomepage/homepage>
 
-First, add the Helm repository:
+## Values
 
-```bash
-helm repo add unknowniq https://unknowniq.github.io/helm-charts/
-helm repo update
-```
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| autoscaling.enabled | bool | `false` |  |
+| autoscaling.maxReplicas | int | `10` |  |
+| autoscaling.minReplicas | int | `1` |  |
+| autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| config.bookmarks | list | `[]` |  |
+| config.docker | object | `{}` |  |
+| config.kubernetes.mode | string | `"cluster"` |  |
+| config.services | list | `[]` |  |
+| config.settings.disableHostValidation | bool | `true` |  |
+| config.widgets | list | `[]` |  |
+| customCss | string | `""` |  |
+| customJs | string | `""` |  |
+| deploymentAnnotations | object | `{}` |  |
+| enableRbac | bool | `true` |  |
+| env[0].name | string | `"LOG_TARGETS"` |  |
+| env[0].value | string | `"stdout"` |  |
+| env[1].name | string | `"HOMEPAGE_ALLOWED_HOSTS"` |  |
+| env[1].value | string | `"localhost"` |  |
+| fullnameOverride | string | `""` |  |
+| image.pullPolicy | string | `"IfNotPresent"` |  |
+| image.repository | string | `"ghcr.io/gethomepage/homepage"` |  |
+| image.tag | string | `""` |  |
+| imagePullSecrets | list | `[]` |  |
+| ingress.main.annotations | object | `{}` |  |
+| ingress.main.className | string | `"nginx"` |  |
+| ingress.main.enabled | bool | `false` |  |
+| ingress.main.hosts[0].host | string | `"chart-example.local"` |  |
+| ingress.main.hosts[0].paths[0].path | string | `"/"` |  |
+| ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
+| ingress.main.tls | list | `[]` |  |
+| nameOverride | string | `""` |  |
+| networkPolicy.egress | list | `[]` |  |
+| networkPolicy.egressDNS | bool | `true` |  |
+| networkPolicy.enabled | bool | `false` |  |
+| networkPolicy.ingress | list | `[]` |  |
+| nodeSelector | object | `{}` |  |
+| persistence.config.accessMode | string | `"ReadWriteOnce"` |  |
+| persistence.config.enabled | bool | `false` |  |
+| persistence.config.size | string | `"1Gi"` |  |
+| podAnnotations | object | `{}` |  |
+| podDisruptionBudget.enabled | bool | `false` |  |
+| podDisruptionBudget.minAvailable | int | `1` |  |
+| podSecurityContext.fsGroup | int | `1000` |  |
+| replicaCount | int | `1` |  |
+| resources.requests.cpu | string | `"100m"` |  |
+| resources.requests.memory | string | `"128Mi"` |  |
+| revisionHistoryLimit | int | `3` |  |
+| route.annotations | object | `{}` |  |
+| route.enabled | bool | `false` |  |
+| route.hostnames[0] | string | `"homepage.local"` |  |
+| route.parentRefs[0].name | string | `"gateway"` |  |
+| route.parentRefs[0].namespace | string | `"default"` |  |
+| route.parentRefs[0].sectionName | string | `"https"` |  |
+| route.rules[0].matches[0].path.type | string | `"PathPrefix"` |  |
+| route.rules[0].matches[0].path.value | string | `"/"` |  |
+| securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| securityContext.readOnlyRootFilesystem | bool | `false` |  |
+| securityContext.runAsGroup | int | `1000` |  |
+| securityContext.runAsNonRoot | bool | `true` |  |
+| securityContext.runAsUser | int | `1000` |  |
+| service.annotations | object | `{}` |  |
+| service.port | int | `3000` |  |
+| service.type | string | `"ClusterIP"` |  |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceAccount.name | string | `""` |  |
+| serviceMonitor.enabled | bool | `false` |  |
+| serviceMonitor.honorLabels | bool | `false` |  |
+| serviceMonitor.interval | string | `"30s"` |  |
+| serviceMonitor.labels | object | `{}` |  |
+| serviceMonitor.scrapeTimeout | string | `"10s"` |  |
+| tolerations | list | `[]` |  |
+| volumeMounts | list | `[]` |  |
+| volumes | list | `[]` |  |
 
-To install the chart with the release name `my-homepage`:
-
-```bash
-helm install my-homepage unknowniq/homepage
-```
-
-Or with custom values:
-
-```bash
-helm install my-homepage unknowniq/homepage -f my-values.yaml
-```
-
-The command deploys Homepage on the Kubernetes cluster with default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-homepage` deployment:
-
-```bash
-helm uninstall my-homepage
-```
-
-## Parameters
-
-### Common Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Number of replicas | `1` |
-| `image.repository` | Image repository | `ghcr.io/gethomepage/homepage` |
-| `image.pullPolicy` | Image pull policy | `IfNotPresent` |
-| `image.tag` | Image tag (defaults to chart appVersion) | `""` |
-| `nameOverride` | Override chart name | `""` |
-| `fullnameOverride` | Override full chart name | `""` |
-
-### Service Account Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Create service account | `true` |
-| `serviceAccount.annotations` | Service account annotations | `{}` |
-| `serviceAccount.name` | Service account name | `""` |
-
-### RBAC Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `enableRbac` | Enable RBAC for Kubernetes integration | `true` |
-
-### Service Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` | Service type | `ClusterIP` |
-| `service.port` | Service port | `3000` |
-| `service.annotations` | Service annotations | `{}` |
-
-### Ingress Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.main.enabled` | Enable ingress | `false` |
-| `ingress.main.className` | Ingress class name | `""` |
-| `ingress.main.annotations` | Ingress annotations | `{}` |
-| `ingress.main.hosts` | Ingress hosts configuration | See values.yaml |
-| `ingress.main.tls` | Ingress TLS configuration | `[]` |
-
-### Homepage Configuration Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.bookmarks` | Bookmarks configuration | `[]` |
-| `config.services` | Services configuration | `[]` |
-| `config.widgets` | Widgets configuration | `[]` |
-| `config.kubernetes` | Kubernetes configuration | `{mode: default}` |
-| `config.docker` | Docker configuration | `{}` |
-| `config.settings` | Settings configuration | `{}` |
-| `customCss` | Custom CSS | `""` |
-| `customJs` | Custom JavaScript | `""` |
-
-### Environment Variables
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `env` | Environment variables array | `[]` |
-
-### Persistence Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.config.enabled` | Enable config persistence | `false` |
-| `persistence.config.accessMode` | PVC access mode | `ReadWriteOnce` |
-| `persistence.config.size` | PVC size | `1Gi` |
-| `persistence.config.storageClass` | PVC storage class | `""` |
-| `persistence.config.existingClaim` | Existing PVC name | `""` |
-
-### Resource Management
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources` | Resource requests/limits | `{}` |
-| `autoscaling.enabled` | Enable autoscaling | `false` |
-| `autoscaling.minReplicas` | Minimum replicas | `1` |
-| `autoscaling.maxReplicas` | Maximum replicas | `10` |
-
-## Configuration Examples
-
-### Basic Configuration with Services
-
-```yaml
-config:
-  services:
-    - My Services:
-        - Nextcloud:
-            href: https://nextcloud.example.com
-            description: Personal cloud storage
-            icon: nextcloud.png
-        - Gitea:
-            href: https://git.example.com
-            description: Git hosting
-            icon: gitea.png
-
-  widgets:
-    - search:
-        provider: google
-        target: _blank
-```
-
-### Enable Kubernetes Integration
-
-```yaml
-enableRbac: true
-
-config:
-  kubernetes:
-    mode: cluster
-
-  widgets:
-    - kubernetes:
-        cluster:
-          show: true
-          cpu: true
-          memory: true
-        nodes:
-          show: true
-          cpu: true
-          memory: true
-```
-
-### Enable Ingress
-
-```yaml
-ingress:
-  main:
-    enabled: true
-    className: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    hosts:
-      - host: homepage.example.com
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - secretName: homepage-tls
-        hosts:
-          - homepage.example.com
-
-env:
-  - name: HOMEPAGE_ALLOWED_HOSTS
-    value: "homepage.example.com"
-```
-
-### Docker Socket Integration
-
-```yaml
-volumeMounts:
-  - name: docker-sock
-    mountPath: /var/run/docker.sock
-    readOnly: true
-
-volumes:
-  - name: docker-sock
-    hostPath:
-      path: /var/run/docker.sock
-      type: Socket
-
-config:
-  docker: {}
-```
-
-## Security Considerations
-
-Homepage does not include built-in authentication. For production deployments:
-
-1. Deploy behind a reverse proxy with authentication (e.g., oauth2-proxy)
-2. Use Ingress annotations for authentication
-3. Deploy in a private network or behind VPN
-4. Limit network access with NetworkPolicies
-
-## Kubernetes Service Discovery
-
-Homepage can automatically discover services in your Kubernetes cluster. To enable this feature:
-
-1. Ensure `enableRbac: true` (default)
-2. Set `config.kubernetes.mode: cluster`
-3. Add annotations to your Ingresses:
-
-```yaml
-annotations:
-  gethomepage.dev/enabled: "true"
-  gethomepage.dev/name: "My Service"
-  gethomepage.dev/description: "Service description"
-  gethomepage.dev/group: "My Group"
-  gethomepage.dev/icon: "service-icon.png"
-```
-
-## Additional Resources
-
-- [Homepage Documentation](https://gethomepage.dev/)
-- [GitHub Repository](https://github.com/gethomepage/homepage)
-- [Widget Configuration](https://gethomepage.dev/widgets/)
-- [Service Integrations](https://gethomepage.dev/widgets/services/)
-
-## Support
-
-For issues and questions:
-- [GitHub Issues](https://github.com/gethomepage/homepage/issues)
-- [GitHub Discussions](https://github.com/gethomepage/homepage/discussions)
-- [Discord](https://discord.gg/k4ruYNrudu)
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

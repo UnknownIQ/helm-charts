@@ -1,0 +1,37 @@
+# CI test values - minimal configuration for testing
+# Backups disabled (no S3 access in CI)
+# Persistence enabled but with minimal size
+# Resource limits reduced for CI
+
+replicaCount: 3
+
+image:
+  pullPolicy: IfNotPresent
+
+backup:
+  enabled: false
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+defrag:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
+
+networkPolicy:
+  enabled: false
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2

@@ -1,0 +1,190 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "etcd.fullname" . }}
+  labels:
+    {{- include "etcd.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "etcd.fullname" . }}-headless
+  replicas: {{ .Values.replicaCount }}
+  podManagementPolicy: Parallel
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "etcd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "etcd.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "etcd.serviceAccountName" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: etcd
+        image: {{ include "etcd.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        env:
+        - name: ETCD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ETCD_DATA_DIR
+          value: /var/run/etcd
+        - name: ETCD_INITIAL_CLUSTER_TOKEN
+          value: {{ .Values.etcd.initialClusterToken | default (printf "%s-token" (include "etcd.fullname" .)) | quote }}
+        - name: ETCD_INITIAL_CLUSTER_STATE
+          value: {{ .Values.etcd.initialClusterState | quote }}
+        - name: ETCD_INITIAL_CLUSTER
+          value: {{ include "etcd.initialCluster" . | quote }}
+        - name: ETCD_LISTEN_CLIENT_URLS
+          value: {{ include "etcd.clientProtocol" . }}://0.0.0.0:2379
+        - name: ETCD_ADVERTISE_CLIENT_URLS
+          value: {{ include "etcd.clientUrl" . }}
+        - name: ETCD_LISTEN_PEER_URLS
+          value: {{ include "etcd.peerProtocol" . }}://0.0.0.0:2380
+        - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
+          value: {{ include "etcd.peerUrl" . }}
+        - name: ETCD_AUTO_COMPACTION_MODE
+          value: {{ .Values.etcd.autoCompactionMode | quote }}
+        - name: ETCD_AUTO_COMPACTION_RETENTION
+          value: {{ .Values.etcd.autoCompactionRetention | quote }}
+        - name: ETCD_SNAPSHOT_COUNT
+          value: {{ .Values.etcd.snapshotCount | quote }}
+        - name: ETCD_QUOTA_BACKEND_BYTES
+          value: "{{ .Values.etcd.quotaBackendBytes }}"
+        - name: ETCD_HEARTBEAT_INTERVAL
+          value: {{ .Values.etcd.heartbeatInterval | quote }}
+        - name: ETCD_ELECTION_TIMEOUT
+          value: {{ .Values.etcd.electionTimeout | quote }}
+        - name: ETCD_LOG_LEVEL
+          value: {{ .Values.etcd.logLevel | quote }}
+        - name: ETCD_ENABLE_PPROF
+          value: "false"
+        - name: ETCD_METRICS
+          value: "extensive"
+        {{- if .Values.tls.enabled }}
+        - name: ETCD_TRUSTED_CA_FILE
+          value: /tls/client/{{ .Values.tls.client.caFilename }}
+        - name: ETCD_CERT_FILE
+          value: /tls/client/{{ .Values.tls.client.certFilename }}
+        - name: ETCD_KEY_FILE
+          value: /tls/client/{{ .Values.tls.client.keyFilename }}
+        - name: ETCD_CLIENT_CERT_AUTH
+          value: "false"
+        - name: ETCD_PEER_TRUSTED_CA_FILE
+          value: /tls/peer/{{ .Values.tls.peer.caFilename }}
+        - name: ETCD_PEER_CERT_FILE
+          value: /tls/peer/{{ .Values.tls.peer.certFilename }}
+        - name: ETCD_PEER_KEY_FILE
+          value: /tls/peer/{{ .Values.tls.peer.keyFilename }}
+        - name: ETCD_PEER_CLIENT_CERT_AUTH
+          value: "true"
+        {{- end }}
+        {{- if .Values.auth.enabled }}
+        - name: ETCD_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.auth.existingSecret | default (printf "%s-auth" (include "etcd.fullname" .)) }}
+              key: root-password
+        {{- end }}
+        ports:
+        - name: client
+          containerPort: 2379
+          protocol: TCP
+        - name: peer
+          containerPort: 2380
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 2379
+            {{- if .Values.tls.enabled }}
+            scheme: HTTPS
+            {{- else }}
+            scheme: HTTP
+            {{- end }}
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 2379
+            {{- if .Values.tls.enabled }}
+            scheme: HTTPS
+            {{- else }}
+            scheme: HTTP
+            {{- end }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        volumeMounts:
+        - name: data
+          mountPath: /var/run/etcd
+        {{- if .Values.tls.enabled }}
+        - name: tls-client
+          mountPath: /tls/client
+          readOnly: true
+        - name: tls-peer
+          mountPath: /tls/peer
+          readOnly: true
+        {{- end }}
+      volumes:
+      {{- if .Values.tls.enabled }}
+      - name: tls-client
+        secret:
+          secretName: {{ .Values.tls.client.existingSecret | default (printf "%s-client-tls" (include "etcd.fullname" .)) }}
+          defaultMode: 0400
+      - name: tls-peer
+        secret:
+          secretName: {{ .Values.tls.peer.existingSecret | default (printf "%s-peer-tls" (include "etcd.fullname" .)) }}
+          defaultMode: 0400
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      {{- with .Values.persistence.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      accessModes:
+      - {{ .Values.persistence.accessMode }}
+      {{- if .Values.persistence.storageClass }}
+      storageClassName: {{ .Values.persistence.storageClass | quote }}
+      {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.persistence.size | quote }}

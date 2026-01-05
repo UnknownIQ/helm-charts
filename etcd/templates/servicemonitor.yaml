@@ -1,0 +1,29 @@
+{{- if .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "etcd.fullname" . }}
+  labels:
+    {{- include "etcd.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "etcd.selectorLabels" . | nindent 6 }}
+  endpoints:
+  - port: client
+    path: /metrics
+    interval: {{ .Values.serviceMonitor.interval }}
+    scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+    honorLabels: {{ .Values.serviceMonitor.honorLabels }}
+    {{- if .Values.tls.enabled }}
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: false
+      # Note: Prometheus needs to be configured with etcd client certificates
+      # to scrape metrics over TLS. This typically requires mounting the same
+      # TLS certificates into the Prometheus pods.
+    {{- end }}
+{{- end }}
