@@ -1,5 +1,33 @@
 apiVersion: v1
 entries:
+  etcd:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Initial release of production-ready etcd chart with S3 backup support
+    apiVersion: v2
+    appVersion: v3.5.17
+    created: "2026-01-05T17:22:46.227589426Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: d1b63e83c401e7d051e1d57e19bbc2738595ed5b0ab01414296f7e8bb93323d0
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.0/etcd-0.1.0.tgz
+    version: 0.1.0
   homepage:
   - apiVersion: v2
     appVersion: v1.7.0
@@ -125,4 +153,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2025-11-17T22:04:46.720951257Z"
+generated: "2026-01-05T17:22:46.227601879Z"
