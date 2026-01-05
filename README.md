@@ -1,40 +1,62 @@
 # Helm Charts Repository
 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/unknowniq)](https://artifacthub.io/packages/search?repo=unknowniq)
+
 This repository contains Helm charts for various applications.
 
 ## Available Charts
 
+### etcd
+Production-ready etcd cluster with S3 backup support.
+
+- **Chart Version**: 0.1.0
+- **App Version**: v3.5.17
+- **Documentation**: [etcd/README.md](./etcd/README.md)
+
 ### Homepage
 A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services.
 
-- **Chart Version**: 1.7.0
-- **App Version**: 1.7.0
+- **Chart Version**: 1.8.0
+- **App Version**: v0.9.13
 - **Documentation**: [homepage/README.md](./homepage/README.md)
+
+### SearXNG
+Privacy-respecting metasearch engine.
+
+- **Chart Version**: 0.1.0
+- **App Version**: latest
+- **Documentation**: [searxng/README.md](./searxng/README.md)
 
 ## Usage
 
 ### Adding the Helm Repository
 
 ```bash
-helm repo add my-charts https://<username>.github.io/helm-charts
+helm repo add unknowniq https://unknowniq.github.io/helm-charts
 helm repo update
 ```
 
 ### Installing a Chart
 
 ```bash
+# Install etcd chart
+helm install my-etcd unknowniq/etcd \
+  --set backup.s3.bucket=my-bucket \
+  --set backup.s3.accessKey=AKIAXXXX \
+  --set backup.s3.secretKey=secret
+
 # Install homepage chart
-helm install my-homepage my-charts/homepage
+helm install my-homepage unknowniq/homepage
 
 # Install with custom values
-helm install my-homepage my-charts/homepage -f my-values.yaml
+helm install my-homepage unknowniq/homepage -f my-values.yaml
 ```
 
 ### Installing from Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/<username>/helm-charts.git
+git clone https://github.com/UnknownIQ/helm-charts.git
 cd helm-charts
 
 # Install a chart directly
