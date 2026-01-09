@@ -2,8 +2,8 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.0
-appVersion: "v3.5.17"
+version: 0.1.1
+appVersion: "v3.5.26"
 keywords:
   - etcd
   - database
@@ -19,5 +19,5 @@ maintainers:
 icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
 annotations:
   artifacthub.io/changes: |
-    - kind: added
-      description: Initial release of production-ready etcd chart with S3 backup support
+    - kind: changed
+      description: Update etcd to v3.5.26 (latest stable)
