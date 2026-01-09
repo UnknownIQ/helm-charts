@@ -3,6 +3,33 @@ entries:
   etcd:
   - annotations:
       artifacthub.io/changes: |
+        - kind: changed
+          description: Update etcd to v3.5.26 (latest stable)
+    apiVersion: v2
+    appVersion: v3.5.26
+    created: "2026-01-09T21:25:50.732784811Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: e0592a3368f13244ee64d1eababc6a578d922674780f5cd5ae2e6709d0115d55
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.1/etcd-0.1.1.tgz
+    version: 0.1.1
+  - annotations:
+      artifacthub.io/changes: |
         - kind: added
           description: Initial release of production-ready etcd chart with S3 backup support
     apiVersion: v2
@@ -29,6 +56,30 @@ entries:
     - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.0/etcd-0.1.0.tgz
     version: 0.1.0
   homepage:
+  - apiVersion: v2
+    appVersion: v1.8.0
+    created: "2026-01-09T21:25:50.943143501Z"
+    description: A modern, fully static, fast, secure fully proxied, highly customizable
+      application dashboard with integrations for over 100 services and translations
+      into multiple languages.
+    digest: 8bd9acde154b2494060bedf4d32b9c06888b08427bc3791f19987564d135be7e
+    home: https://github.com/gethomepage/homepage
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
+    keywords:
+    - homepage
+    - dashboard
+    - docker
+    - kubernetes
+    - services
+    maintainers:
+    - name: UnknownIQ
+    name: homepage
+    sources:
+    - https://github.com/gethomepage/homepage
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.8.1/homepage-1.8.1.tgz
+    version: 1.8.1
   - apiVersion: v2
     appVersion: v1.7.0
     created: "2025-11-17T22:04:46.720933003Z"
@@ -127,6 +178,33 @@ entries:
     version: 1.7.1
   searxng:
   - apiVersion: v2
+    appVersion: 2026.1.9-b83e88ea7
+    created: "2026-01-09T21:25:51.216987922Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm/
+      version: 0.7.1
+    description: A privacy-respecting, hackable metasearch engine that aggregates
+      results from various search services without tracking users.
+    digest: c1031e7f8fe10f74efb3561d60543f6781ac6ad88fdcd863410e4a1a4c4c5445
+    home: https://github.com/searxng/searxng
+    icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
+    keywords:
+    - searxng
+    - search
+    - metasearch
+    - privacy
+    maintainers:
+    - name: UnknownIQ
+    name: searxng
+    sources:
+    - https://github.com/searxng/searxng
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.1/searxng-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: latest
     created: "2025-11-17T21:59:44.165839845Z"
     dependencies:
@@ -153,4 +231,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-05T17:22:46.227601879Z"
+generated: "2026-01-09T21:25:51.217016225Z"
