@@ -30,14 +30,14 @@ data:
 
     # Create snapshot
     echo "Creating etcd snapshot..."
-    ETCDCTL_API=3 etcdctl \
+    ETCDCTL_API=3 /etcdctl-bin/etcdctl \
       --endpoints=${ETCD_ENDPOINTS} \
       ${ETCDCTL_OPTS} \
       snapshot save ${SNAPSHOT_FILE}
 
     # Verify snapshot
     echo "Verifying snapshot integrity..."
-    ETCDCTL_API=3 etcdctl snapshot status ${SNAPSHOT_FILE} --write-out=table
+    ETCDCTL_API=3 /etcdctl-bin/etcdctl snapshot status ${SNAPSHOT_FILE} --write-out=table
 
     # Upload to S3
     echo "Uploading snapshot to S3..."

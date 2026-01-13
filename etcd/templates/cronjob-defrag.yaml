@@ -30,10 +30,39 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
             fsGroup: 1001
+          initContainers:
+          - name: download-etcdctl
+            image: busybox:1.36
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -ec
+            - |
+              ETCD_VER={{ .Values.image.tag | default .Chart.AppVersion }}
+              DOWNLOAD_URL=https://github.com/etcd-io/etcd/releases/download
+              echo "Downloading etcdctl ${ETCD_VER}..."
+              wget -q ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -O /tmp/etcd.tar.gz
+              tar xzf /tmp/etcd.tar.gz -C /tmp --strip-components=1
+              cp /tmp/etcdctl /etcdctl-bin/etcdctl
+              chmod +x /etcdctl-bin/etcdctl
+              rm -rf /tmp/etcd*
+              echo "etcdctl downloaded successfully"
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1001
+              runAsGroup: 1001
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              readOnlyRootFilesystem: false
+            volumeMounts:
+            - name: etcdctl-bin
+              mountPath: /etcdctl-bin
           containers:
           - name: etcd-defrag
-            image: {{ include "etcd.image" . }}
-            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            image: alpine:3.19
+            imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
             - -ec
@@ -50,7 +79,7 @@ spec:
 
               {{- range $i := until (int .Values.replicaCount) }}
               echo "Defragmenting {{ $fullname }}-{{ $i }}..."
-              ETCDCTL_API=3 etcdctl \
+              ETCDCTL_API=3 /etcdctl-bin/etcdctl \
                 --endpoints={{ $protocol }}://{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless:{{ $.Values.service.clientPort }} \
                 ${ETCDCTL_OPTS} \
                 defrag --command-timeout=60s
@@ -68,14 +97,19 @@ spec:
               readOnlyRootFilesystem: false
             resources:
               {{- toYaml .Values.defrag.resources | nindent 14 }}
-            {{- if .Values.tls.enabled }}
             volumeMounts:
+            - name: etcdctl-bin
+              mountPath: /etcdctl-bin
+              readOnly: true
+            {{- if .Values.tls.enabled }}
             - name: tls-client
               mountPath: /tls/client
               readOnly: true
             {{- end }}
-          {{- if .Values.tls.enabled }}
           volumes:
+          - name: etcdctl-bin
+            emptyDir: {}
+          {{- if .Values.tls.enabled }}
           - name: tls-client
             secret:
               secretName: {{ .Values.tls.client.existingSecret | default (printf "%s-client-tls" (include "etcd.fullname" .)) }}

@@ -30,10 +30,39 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
             fsGroup: 1001
+          initContainers:
+          - name: download-etcdctl
+            image: busybox:1.36
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -ec
+            - |
+              ETCD_VER={{ .Values.image.tag | default .Chart.AppVersion }}
+              DOWNLOAD_URL=https://github.com/etcd-io/etcd/releases/download
+              echo "Downloading etcdctl ${ETCD_VER}..."
+              wget -q ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -O /tmp/etcd.tar.gz
+              tar xzf /tmp/etcd.tar.gz -C /tmp --strip-components=1
+              cp /tmp/etcdctl /etcdctl-bin/etcdctl
+              chmod +x /etcdctl-bin/etcdctl
+              rm -rf /tmp/etcd*
+              echo "etcdctl downloaded successfully"
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1001
+              runAsGroup: 1001
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              readOnlyRootFilesystem: false
+            volumeMounts:
+            - name: etcdctl-bin
+              mountPath: /etcdctl-bin
           containers:
           - name: etcd-backup
-            image: {{ include "etcd.image" . }}
-            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            image: amazon/aws-cli:2.15.17
+            imagePullPolicy: IfNotPresent
             command: ["/bin/sh", "/scripts/backup.sh"]
             securityContext:
               allowPrivilegeEscalation: false
@@ -75,6 +104,9 @@ spec:
             resources:
               {{- toYaml .Values.backup.resources | nindent 14 }}
             volumeMounts:
+            - name: etcdctl-bin
+              mountPath: /etcdctl-bin
+              readOnly: true
             - name: backup-script
               mountPath: /scripts
               readOnly: true
@@ -84,6 +116,8 @@ spec:
               readOnly: true
             {{- end }}
           volumes:
+          - name: etcdctl-bin
+            emptyDir: {}
           - name: backup-script
             configMap:
               name: {{ include "etcd.fullname" . }}-backup-script
