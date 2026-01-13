@@ -3,6 +3,35 @@ entries:
   etcd:
   - annotations:
       artifacthub.io/changes: |
+        - kind: added
+          description: Add values.schema.json for Artifact Hub validation
+        - kind: fixed
+          description: Fix backup and defrag CronJobs to work with minimal etcd image
+    apiVersion: v2
+    appVersion: v3.5.26
+    created: "2026-01-13T16:54:32.45637173Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: 1e56a207f86fe5069f496d6476d517f8fa59e5a2f2933fdda12355ec7db355a0
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.2/etcd-0.1.2.tgz
+    version: 0.1.2
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Update etcd to v3.5.26 (latest stable)
     apiVersion: v2
@@ -231,4 +260,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-09T21:25:51.217016225Z"
+generated: "2026-01-13T16:54:32.456403139Z"
