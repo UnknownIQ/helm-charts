@@ -2,7 +2,7 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.1
+version: 0.1.2
 appVersion: "v3.5.26"
 keywords:
   - etcd
@@ -19,5 +19,7 @@ maintainers:
 icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
 annotations:
   artifacthub.io/changes: |
-    - kind: changed
-      description: Update etcd to v3.5.26 (latest stable)
+    - kind: added
+      description: Add values.schema.json for Artifact Hub validation
+    - kind: fixed
+      description: Fix backup and defrag CronJobs to work with minimal etcd image
