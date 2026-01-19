@@ -118,6 +118,14 @@ resources:
     cpu: 50m
     memory: 128Mi
 
+initContainerResources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
 autoscaling:
   enabled: false
   minReplicas: 1

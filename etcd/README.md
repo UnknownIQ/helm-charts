@@ -1,6 +1,6 @@
 # etcd
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.5.17](https://img.shields.io/badge/AppVersion-v3.5.17-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.5.26](https://img.shields.io/badge/AppVersion-v3.5.26-informational?style=flat-square)
 
 Production-ready etcd cluster with S3 backup support
 
@@ -53,7 +53,7 @@ Production-ready etcd cluster with S3 backup support
 | etcd.initialClusterState | string | `"new"` |  |
 | etcd.initialClusterToken | string | `""` |  |
 | etcd.logLevel | string | `"info"` |  |
-| etcd.quotaBackendBytes | int | `2147483648` |  |
+| etcd.quotaBackendBytes | string | `"2147483648"` |  |
 | etcd.snapshotCount | int | `10000` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |

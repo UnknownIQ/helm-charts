@@ -40,6 +40,8 @@ spec:
       - name: config-init
         image: busybox:latest
         command: ['sh', '-c', 'if [ ! -f /searxng/settings.yml ] || [ -L /searxng/settings.yml ]; then rm -rf /searxng/*; cp -rL /configmap/* /searxng/; fi']
+        resources:
+          {{- toYaml .Values.initContainerResources | nindent 12 }}
         volumeMounts:
         - name: config
           mountPath: /searxng
