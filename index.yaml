@@ -208,6 +208,33 @@ entries:
   searxng:
   - apiVersion: v2
     appVersion: 2026.1.9-b83e88ea7
+    created: "2026-01-19T17:03:11.495019583Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm/
+      version: 0.7.1
+    description: A privacy-respecting, hackable metasearch engine that aggregates
+      results from various search services without tracking users.
+    digest: 5c8956e6eafa840715de5a5ded5001ab85a465a1f026e188f2a84551bed177fc
+    home: https://github.com/searxng/searxng
+    icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
+    keywords:
+    - searxng
+    - search
+    - metasearch
+    - privacy
+    maintainers:
+    - name: UnknownIQ
+    name: searxng
+    sources:
+    - https://github.com/searxng/searxng
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.2/searxng-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 2026.1.9-b83e88ea7
     created: "2026-01-09T21:25:51.216987922Z"
     dependencies:
     - condition: valkey.enabled
@@ -260,4 +287,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-01-13T16:54:32.456403139Z"
+generated: "2026-01-19T17:03:11.495058986Z"
