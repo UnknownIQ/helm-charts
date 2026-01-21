@@ -73,10 +73,21 @@ Return the proper image name
 Generate secret key for SearXNG
 */}}
 {{- define "searxng.secretKey" -}}
-{{- if .Values.config.server.secret_key }}
-{{- .Values.config.server.secret_key }}
+{{- if .Values.secret.create }}
+{{- .Values.secret.secretKey }}
 {{- else }}
-{{- randAlphaNum 32 }}
+{{- .Values.secret.secretKey }}
+{{- end }}
+{{- end }}
+
+{{/*
+Get secret name for SearXNG
+*/}}
+{{- define "searxng.secretName" -}}
+{{- if .Values.secret.create }}
+{{- printf "%s-secret" (include "searxng.fullname" .) }}
+{{- else }}
+{{- .Values.secret.existingSecret }}
 {{- end }}
 {{- end }}
 
@@ -121,7 +132,6 @@ Returns the merged YAML as a string
     "base_url" .Values.config.server.base_url
     "limiter" .Values.valkey.enabled
     "public_instance" .Values.config.server.public_instance
-    "secret_key" (include "searxng.secretKey" .)
     "image_proxy" .Values.config.server.image_proxy
     "method" .Values.config.server.method
   )

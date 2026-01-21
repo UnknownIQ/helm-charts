@@ -588,6 +588,25 @@
           }
         }
       ]
+    },
+    "secret": {
+      "type": "object",
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "description": "Create a new secret or use an existing one"
+        },
+        "existingSecret": {
+          "type": "string",
+          "description": "Name of existing secret if create=false. The secret must contain a key specified by secretKey"
+        },
+        "secretKey": {
+          "type": "string",
+          "description": "Key name in the secret containing the SEARXNG_SECRET value"
+        }
+      },
+      "required": ["create", "secretKey"],
+      "description": "Secret management for SearXNG. The secret is injected via SEARXNG_SECRET environment variable."
     }
   },
   "required": ["replicaCount", "image", "service", "config"]

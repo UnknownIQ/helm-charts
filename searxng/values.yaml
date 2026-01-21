@@ -86,7 +86,7 @@ config:
     max_ban_time_on_fail: 120
 
   server:
-    secret_key: ""  # Auto-generated if empty
+    # secret_key is managed via secrets (see below) and injected via SEARXNG_SECRET env var
     limiter: false  # Auto-enabled when valkey.enabled=true
     public_instance: false
     image_proxy: false
@@ -122,6 +122,14 @@ config:
 #   brand:
 #     new_issue_url: "https://custom.url/issues"
 extraConfig: {}
+
+# Secret management for SearXNG
+secret:
+  # Create a new secret or use an existing one
+  create: true  # Set to false to use existingSecret
+  existingSecret: ""  # Name of existing secret if create=false
+  # The secret must contain a key specified by secretKey
+  secretKey: "searxng-secret"  # Key name in the secret containing the secret value
 
 resources:
   requests:
