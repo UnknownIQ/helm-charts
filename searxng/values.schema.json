@@ -573,6 +573,21 @@
         }
       },
       "description": "Valkey (Redis alternative) configuration"
+    },
+    "extraConfig": {
+      "type": "object",
+      "description": "Extra SearXNG configuration to merge with defaults (in YAML format). This allows you to override any default config value or add new ones.",
+      "examples": [
+        {
+          "server": {
+            "port": 8081,
+            "image_proxy": true
+          },
+          "brand": {
+            "new_issue_url": "https://custom.url/issues"
+          }
+        }
+      ]
     }
   },
   "required": ["replicaCount", "image", "service", "config"]

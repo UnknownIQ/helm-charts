@@ -90,3 +90,105 @@ Valkey connection URL
 {{- printf "false" }}
 {{- end }}
 {{- end }}
+
+{{/*
+Merge default SearXNG config with extra config from values
+Returns the merged YAML as a string
+*/}}
+{{- define "searxng.mergedConfig" -}}
+{{- $defaultConfig := dict
+  "general" (dict
+    "debug" false
+    "instance_name" .Values.config.general.instance_name
+    "enable_metrics" .Values.config.general.enable_metrics
+  )
+  "brand" (dict
+    "new_issue_url" "https://github.com/searxng/searxng/issues/new"
+    "docs_url" "https://docs.searxng.org/"
+    "public_instances" "https://searx.space"
+    "wiki_url" "https://github.com/searxng/searxng/wiki"
+  )
+  "search" (dict
+    "safe_search" .Values.config.search.safe_search
+    "autocomplete" .Values.config.search.autocomplete
+    "ban_time_on_fail" .Values.config.search.ban_time_on_fail
+    "max_ban_time_on_fail" .Values.config.search.max_ban_time_on_fail
+    "formats" (list "html")
+  )
+  "server" (dict
+    "port" 8080
+    "bind_address" "0.0.0.0"
+    "base_url" .Values.config.server.base_url
+    "limiter" .Values.valkey.enabled
+    "public_instance" .Values.config.server.public_instance
+    "secret_key" (include "searxng.secretKey" .)
+    "image_proxy" .Values.config.server.image_proxy
+    "method" .Values.config.server.method
+  )
+  "valkey" (dict
+    "url" (include "searxng.valkeyUrl" .)
+  )
+  "ui" (dict
+    "default_theme" .Values.config.ui.default_theme
+    "center_alignment" .Values.config.ui.center_alignment
+    "infinite_scroll" .Values.config.ui.infinite_scroll
+    "query_in_title" .Values.config.ui.query_in_title
+    "default_locale" .Values.config.ui.default_locale
+  )
+  "outgoing" (dict
+    "request_timeout" 3.0
+    "useragent_suffix" ""
+    "pool_connections" 100
+    "pool_maxsize" 20
+    "enable_http2" true
+  )
+  "doi_resolvers" (dict
+    "oadoi.org" "https://oadoi.org/"
+    "doi.org" "https://doi.org/"
+  )
+  "default_doi_resolver" "oadoi.org"
+  "engines" (list
+    (dict
+      "name" "duckduckgo"
+      "engine" "duckduckgo"
+      "shortcut" "ddg"
+      "disabled" (index .Values.config.engines 0 | default dict).disabled | default false
+    )
+    (dict
+      "name" "google"
+      "engine" "google"
+      "shortcut" "go"
+      "disabled" (index .Values.config.engines 1 | default dict).disabled | default false
+    )
+    (dict
+      "name" "wikipedia"
+      "engine" "wikipedia"
+      "shortcut" "wp"
+      "display_type" (list "infobox")
+      "disabled" (index .Values.config.engines 2 | default dict).disabled | default false
+    )
+    (dict
+      "name" "github"
+      "engine" "github"
+      "shortcut" "gh"
+      "disabled" (index .Values.config.engines 3 | default dict).disabled | default false
+    )
+    (dict
+      "name" "stackoverflow"
+      "engine" "stackexchange"
+      "shortcut" "st"
+      "api_site" "stackoverflow"
+      "categories" (list "it" "q&a")
+      "disabled" (index .Values.config.engines 4 | default dict).disabled | default false
+    )
+  )
+}}
+{{- /* Add open_metrics if defined */ -}}
+{{- if .Values.config.general.open_metrics }}
+{{- $_ := set $defaultConfig.general "open_metrics" .Values.config.general.open_metrics }}
+{{- end }}
+{{- /* Merge with extra config */ -}}
+{{- $merged := mergeOverwrite $defaultConfig .Values.extraConfig }}
+{{- $merged | toYaml }}
+{{- end }}
+

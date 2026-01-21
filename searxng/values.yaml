@@ -113,6 +113,16 @@ config:
     - name: stackoverflow
       disabled: false
 
+# Extra SearXNG configuration to merge with defaults (in YAML format)
+# This allows you to override any default config value or add new ones
+# Example:
+# extraConfig:
+#   server:
+#     port: 8081
+#   brand:
+#     new_issue_url: "https://custom.url/issues"
+extraConfig: {}
+
 resources:
   requests:
     cpu: 50m
