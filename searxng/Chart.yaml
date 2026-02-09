@@ -17,6 +17,6 @@ maintainers:
 icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
 dependencies:
   - name: valkey
-    version: "0.7.1"
+    version: "0.9.3"
     repository: https://valkey-io.github.io/valkey-helm/
     condition: valkey.enabled
