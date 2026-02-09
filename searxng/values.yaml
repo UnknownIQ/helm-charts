@@ -6,6 +6,11 @@ image:
   pullPolicy: IfNotPresent
   tag: ""
 
+initContainerImage:
+  repository: busybox
+  pullPolicy: IfNotPresent
+  tag: "1.36"
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
