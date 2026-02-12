@@ -2,8 +2,8 @@ apiVersion: v2
 name: homepage
 description: A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
 type: application
-version: 1.8.1
-appVersion: "v1.8.0"
+version: 1.8.2
+appVersion: "v1.10.1"
 keywords:
   - homepage
   - dashboard

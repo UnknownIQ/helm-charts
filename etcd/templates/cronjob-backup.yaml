@@ -32,7 +32,7 @@ spec:
             fsGroup: 1001
           initContainers:
           - name: download-etcdctl
-            image: busybox:1.36
+            image: busybox:1.37
             imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
@@ -61,7 +61,7 @@ spec:
               mountPath: /etcdctl-bin
           containers:
           - name: etcd-backup
-            image: amazon/aws-cli:2.15.17
+            image: amazon/aws-cli:2.33.21
             imagePullPolicy: IfNotPresent
             command: ["/bin/sh", "/scripts/backup.sh"]
             securityContext:

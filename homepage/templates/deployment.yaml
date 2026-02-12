@@ -35,7 +35,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
       - name: config-init
-        image: busybox:latest
+        image: busybox:1.37
         command: ['sh', '-c', 'if [ ! -f /config/settings.yaml ] || [ -L /config/settings.yaml ]; then rm -rf /config/*; cp -rL /configmap/* /config/; fi']
         volumeMounts:
         - name: config

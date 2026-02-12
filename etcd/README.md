@@ -1,6 +1,6 @@
 # etcd
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.5.26](https://img.shields.io/badge/AppVersion-v3.5.26-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.5.26](https://img.shields.io/badge/AppVersion-v3.5.26-informational?style=flat-square)
 
 Production-ready etcd cluster with S3 backup support
 
@@ -74,7 +74,8 @@ Production-ready etcd cluster with S3 backup support
 | persistence.storageClass | string | `""` |  |
 | podAnnotations | object | `{}` |  |
 | podDisruptionBudget.enabled | bool | `true` |  |
-| podDisruptionBudget.minAvailable | int | `2` |  |
+| podDisruptionBudget.maxUnavailable | int | `1` |  |
+| podDisruptionBudget.minAvailable | string | `""` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext.fsGroup | int | `1001` |  |
 | podSecurityContext.fsGroupChangePolicy | string | `"OnRootMismatch"` |  |

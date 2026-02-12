@@ -233,11 +233,13 @@ persistence:
 ## @section PodDisruptionBudget parameters
 
 ## @param podDisruptionBudget.enabled Enable PodDisruptionBudget
-## @param podDisruptionBudget.minAvailable Minimum number of pods that must be available
+## @param podDisruptionBudget.minAvailable Minimum number of pods that must be available (optional, takes precedence over maxUnavailable)
+## @param podDisruptionBudget.maxUnavailable Maximum number of pods that can be unavailable (default: 1)
 ##
 podDisruptionBudget:
   enabled: true
-  minAvailable: 2
+  minAvailable: ""
+  maxUnavailable: 1
 
 ## @section Monitoring parameters
 
