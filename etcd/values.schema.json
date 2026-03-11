@@ -354,8 +354,16 @@
           "type": "boolean"
         },
         "minAvailable": {
+          "oneOf": [
+            {"type": "integer", "minimum": 1},
+            {"type": "string", "maxLength": 0}
+          ],
+          "description": "Minimum number of pods that must be available. Takes precedence over maxUnavailable. Leave empty to use maxUnavailable."
+        },
+        "maxUnavailable": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "description": "Maximum number of pods that can be unavailable (default: 1)"
         }
       }
     },
