@@ -60,6 +60,7 @@ jobs:
         run: rm -f /tmp/keyring.gpg /tmp/passphrase.txt
 
       - name: Run chart-releaser
+        continue-on-error: true
         uses: helm/chart-releaser-action@v1
         with:
           charts_dir: .
