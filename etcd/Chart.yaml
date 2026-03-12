@@ -2,7 +2,7 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.4
+version: 0.1.5
 appVersion: "v3.5.26"
 keywords:
   - etcd
@@ -20,4 +20,4 @@ icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-
 annotations:
   artifacthub.io/changes: |
     - kind: fixed
-      description: Fix values.schema.json to allow minAvailable as empty string or integer
+      description: Fix PDB selector to exclude CronJob pods - add component label to StatefulSet pods only

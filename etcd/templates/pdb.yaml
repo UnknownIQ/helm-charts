@@ -16,4 +16,5 @@ spec:
   selector:
     matchLabels:
       {{- include "etcd.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: etcd
 {{- end }}
