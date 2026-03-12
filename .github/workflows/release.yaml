@@ -34,14 +34,36 @@ jobs:
           helm repo add valkey https://valkey-io.github.io/valkey-helm/
           helm repo update
 
+      - name: Prepare GPG keyring and passphrase
+        run: |
+          echo "${{ secrets.GPG_KEYRING_BASE64 }}" | base64 -d > /tmp/keyring.gpg
+          echo "${{ secrets.GPG_PASSPHRASE }}" > /tmp/passphrase.txt
+
+      - name: Package and sign charts
+        run: |
+          mkdir -p .cr-release-packages
+          for chart_dir in */; do
+            chart="${chart_dir%/}"
+            if [ -f "${chart}/Chart.yaml" ]; then
+              helm dependency update "./${chart}" || true
+              helm package "./${chart}" \
+                --sign \
+                --key "${{ secrets.GPG_KEY_NAME }}" \
+                --keyring /tmp/keyring.gpg \
+                --passphrase-file /tmp/passphrase.txt \
+                --destination .cr-release-packages
+            fi
+          done
+
+      - name: Clean up GPG secrets
+        if: always()
+        run: rm -f /tmp/keyring.gpg /tmp/passphrase.txt
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1
         with:
           charts_dir: .
           skip_existing: true
-          sign: true
-          keyring: ${{ secrets.GPG_KEYRING_BASE64 }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          key: ${{ secrets.GPG_KEY_NAME }}
+          skip_packaging: true
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
