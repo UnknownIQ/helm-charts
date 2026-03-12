@@ -4,6 +4,33 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: fixed
+          description: Fix PDB selector to exclude CronJob pods - add component label to StatefulSet pods only
+    apiVersion: v2
+    appVersion: v3.5.26
+    created: "2026-03-12T08:36:16.884801844Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: e7885720730a5fe9594083c8a0adbf44d4b0be33b9d9b5d7b2f80a2d36b38187
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.5/etcd-0.1.5.tgz
+    version: 0.1.5
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: fixed
           description: Fix values.schema.json to allow minAvailable as empty string or integer
     apiVersion: v2
     appVersion: v3.5.26
@@ -475,4 +502,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-12T08:19:17.501090188Z"
+generated: "2026-03-12T08:36:17.005067165Z"
