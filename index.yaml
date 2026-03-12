@@ -3,6 +3,33 @@ entries:
   etcd:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Fix values.schema.json to allow minAvailable as empty string or integer
+    apiVersion: v2
+    appVersion: v3.5.26
+    created: "2026-03-12T08:19:17.501020457Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: 300d72a8a7734f3f3338397b9b1d1ff385b7aa5838944b5a4bfc08f7bcf9c992
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.4/etcd-0.1.4.tgz
+    version: 0.1.4
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Update PodDisruptionBudget to use maxUnavailable instead of minAvailable for better flexibility
         - kind: changed
@@ -448,4 +475,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-02-12T22:40:58.427587951Z"
+generated: "2026-03-12T08:19:17.501090188Z"
