@@ -1,6 +1,6 @@
 # searxng
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.2.11-970f2b843](https://img.shields.io/badge/AppVersion-2026.2.11--970f2b843-informational?style=flat-square)
+![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.2.11-970f2b843](https://img.shields.io/badge/AppVersion-2026.2.11--970f2b843-informational?style=flat-square)
 
 A privacy-respecting, hackable metasearch engine that aggregates results from various search services without tracking users.
 
@@ -20,7 +20,7 @@ A privacy-respecting, hackable metasearch engine that aggregates results from va
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://valkey-io.github.io/valkey-helm/ | valkey | 0.7.1 |
+| https://valkey-io.github.io/valkey-helm/ | valkey | 0.9.3 |
 
 ## Values
 
@@ -53,7 +53,6 @@ A privacy-respecting, hackable metasearch engine that aggregates results from va
 | config.server.limiter | bool | `false` |  |
 | config.server.method | string | `"POST"` |  |
 | config.server.public_instance | bool | `false` |  |
-| config.server.secret_key | string | `""` |  |
 | config.ui.center_alignment | bool | `false` |  |
 | config.ui.default_locale | string | `""` |  |
 | config.ui.default_theme | string | `"simple"` |  |
@@ -61,6 +60,7 @@ A privacy-respecting, hackable metasearch engine that aggregates results from va
 | config.ui.query_in_title | bool | `false` |  |
 | deploymentAnnotations | object | `{}` |  |
 | env | list | `[]` |  |
+| extraConfig | object | `{}` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"searxng/searxng"` |  |
@@ -73,6 +73,9 @@ A privacy-respecting, hackable metasearch engine that aggregates results from va
 | ingress.main.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
 | ingress.main.tls | list | `[]` |  |
+| initContainerImage.pullPolicy | string | `"IfNotPresent"` |  |
+| initContainerImage.repository | string | `"busybox"` |  |
+| initContainerImage.tag | string | `"1.36"` |  |
 | initContainerResources.limits.cpu | string | `"100m"` |  |
 | initContainerResources.limits.memory | string | `"64Mi"` |  |
 | initContainerResources.requests.cpu | string | `"10m"` |  |
@@ -106,6 +109,9 @@ A privacy-respecting, hackable metasearch engine that aggregates results from va
 | route.parentRefs[0].sectionName | string | `"https"` |  |
 | route.rules[0].matches[0].path.type | string | `"PathPrefix"` |  |
 | route.rules[0].matches[0].path.value | string | `"/"` |  |
+| secret.create | bool | `true` |  |
+| secret.existingSecret | string | `""` |  |
+| secret.secretKey | string | `"searxng-secret"` |  |
 | securityContext.allowPrivilegeEscalation | bool | `false` |  |
 | securityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | securityContext.readOnlyRootFilesystem | bool | `false` |  |
