@@ -2,7 +2,7 @@ apiVersion: v2
 name: searxng
 description: A privacy-respecting, hackable metasearch engine that aggregates results from various search services without tracking users.
 type: application
-version: 0.1.7
+version: 0.1.8
 appVersion: "2026.4.3-53141be38"
 keywords:
   - searxng
@@ -17,8 +17,10 @@ maintainers:
 icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
 annotations:
   artifacthub.io/changes: |
-    - kind: changed
-      description: Update searxng to 2026.4.3-53141be38 and busybox initContainer to 1.37
+    - kind: fixed
+      description: Add enableServiceLinks=false to prevent granian port conflict with Kubernetes service env vars
+    - kind: fixed
+      description: Add fix-permissions initContainer to ensure /etc/searxng is owned by searxng:searxng
 dependencies:
   - name: valkey
     version: "0.9.3"

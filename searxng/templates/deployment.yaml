@@ -34,9 +34,24 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "searxng.serviceAccountName" . }}
+      enableServiceLinks: false
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+      - name: fix-permissions
+        image: "{{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}"
+        imagePullPolicy: {{ .Values.initContainerImage.pullPolicy }}
+        command: ['chown', '-R', '977:977', '/etc/searxng']
+        securityContext:
+          runAsUser: 0
+          runAsNonRoot: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: config
+          mountPath: /etc/searxng
       - name: config-init
         image: "{{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}"
         imagePullPolicy: {{ .Values.initContainerImage.pullPolicy }}
