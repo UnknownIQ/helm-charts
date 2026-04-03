@@ -2,8 +2,8 @@ apiVersion: v2
 name: homepage
 description: A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
 type: application
-version: 1.8.2
-appVersion: "v1.10.1"
+version: 1.8.3
+appVersion: "v1.12.3"
 keywords:
   - homepage
   - dashboard
@@ -16,3 +16,7 @@ sources:
 maintainers:
   - name: UnknownIQ
 icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
+annotations:
+  artifacthub.io/changes: |
+    - kind: changed
+      description: Update homepage to v1.12.3

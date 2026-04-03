@@ -9,7 +9,7 @@ image:
 initContainerImage:
   repository: busybox
   pullPolicy: IfNotPresent
-  tag: "1.36"
+  tag: "1.37"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -171,13 +171,22 @@ serviceMonitor:
   scrapeTimeout: 10s
   labels: {}
   honorLabels: false
-  # Basic auth for /metrics endpoint (requires config.general.open_metrics to be set)
+  # Basic auth for the /metrics endpoint.
+  # SearXNG protects /metrics with HTTP basic auth — any username, password must
+  # match config.general.open_metrics below.
+  # To enable metrics scraping:
+  #   1. Set config.general.open_metrics to a password (rendered into settings.yml ConfigMap)
+  #   2. Create a secret with the same password:
+  #        kubectl create secret generic searxng-metrics-auth \
+  #          --from-literal=username=prometheus \
+  #          --from-literal=password=<same-password-as-open_metrics>
+  #   3. Reference that secret here and set serviceMonitor.enabled: true
   basicAuth: {}
     # password:
-    #   name: searxng-metrics-secret
+    #   name: searxng-metrics-auth
     #   key: password
     # username:
-    #   name: searxng-metrics-secret
+    #   name: searxng-metrics-auth
     #   key: username
 
 nodeSelector: {}

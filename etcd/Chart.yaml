@@ -2,8 +2,8 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.5
-appVersion: "v3.5.26"
+version: 0.1.6
+appVersion: "v3.5.29"
 keywords:
   - etcd
   - database
@@ -19,5 +19,5 @@ maintainers:
 icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
 annotations:
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Fix PDB selector to exclude CronJob pods - add component label to StatefulSet pods only
+    - kind: changed
+      description: Update etcd to v3.5.29, alpine to 3.23, aws-cli to 2.34.23
