@@ -38,29 +38,15 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-      - name: fix-permissions
-        image: "{{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}"
-        imagePullPolicy: {{ .Values.initContainerImage.pullPolicy }}
-        command: ['chown', '-R', '977:977', '/etc/searxng']
-        securityContext:
-          runAsUser: 0
-          runAsNonRoot: false
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-        volumeMounts:
-        - name: config
-          mountPath: /etc/searxng
       - name: config-init
         image: "{{ .Values.initContainerImage.repository }}:{{ .Values.initContainerImage.tag }}"
         imagePullPolicy: {{ .Values.initContainerImage.pullPolicy }}
-        command: ['sh', '-c', 'if [ ! -f /searxng/settings.yml ] || [ -L /searxng/settings.yml ]; then rm -rf /searxng/*; cp -rL /configmap/* /searxng/; fi']
+        command: ['sh', '-c', 'if [ ! -f /searxng-config/settings.yml ] || [ -L /searxng-config/settings.yml ]; then rm -rf /searxng-config/*; cp -rL /configmap/* /searxng-config/; fi']
         resources:
           {{- toYaml .Values.initContainerResources | nindent 12 }}
         volumeMounts:
         - name: config
-          mountPath: /searxng
+          mountPath: /searxng-config
         - name: config-map
           mountPath: /configmap
       containers:
@@ -71,7 +57,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: SEARXNG_SETTINGS_PATH
-          value: "/etc/searxng/settings.yml"
+          value: "/searxng-config/settings.yml"
         - name: SEARXNG_SECRET
           valueFrom:
             secretKeyRef:
@@ -100,7 +86,7 @@ spec:
           {{- toYaml .Values.resources | nindent 12 }}
         volumeMounts:
         - name: config
-          mountPath: /etc/searxng
+          mountPath: /searxng-config
         {{- with .Values.volumeMounts }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
