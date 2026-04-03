@@ -370,6 +370,39 @@ entries:
   searxng:
   - annotations:
       artifacthub.io/changes: |
+        - kind: fixed
+          description: Add enableServiceLinks=false to prevent granian port conflict with Kubernetes service env vars
+        - kind: fixed
+          description: Add fix-permissions initContainer to ensure /etc/searxng is owned by searxng:searxng
+    apiVersion: v2
+    appVersion: 2026.4.3-53141be38
+    created: "2026-04-03T14:29:19.3175396Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm/
+      version: 0.9.3
+    description: A privacy-respecting, hackable metasearch engine that aggregates
+      results from various search services without tracking users.
+    digest: 431b62745b63973ed7e544a23c7c671e65621bde26d21b4b29f0186e20a641a9
+    home: https://github.com/searxng/searxng
+    icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
+    keywords:
+    - searxng
+    - search
+    - metasearch
+    - privacy
+    maintainers:
+    - name: UnknownIQ
+    name: searxng
+    sources:
+    - https://github.com/searxng/searxng
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.8/searxng-0.1.8.tgz
+    version: 0.1.8
+  - annotations:
+      artifacthub.io/changes: |
         - kind: changed
           description: Update searxng to 2026.4.3-53141be38 and busybox initContainer to 1.37
     apiVersion: v2
@@ -588,4 +621,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-03T13:42:03.815361756Z"
+generated: "2026-04-03T14:29:19.317607426Z"
