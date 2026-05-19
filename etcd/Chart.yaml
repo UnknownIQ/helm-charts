@@ -21,8 +21,9 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       description: Update etcd to v3.6.11, aws-cli to 2.34.49
-    - kind: breaking-change
+    - kind: changed
       description: Upgrading from v3.5 to v3.6 requires following the etcd upgrade guide
+      breaking: true
       links:
         - name: Upgrade guide
           url: https://etcd.io/docs/v3.6/upgrades/upgrade_3_6/
