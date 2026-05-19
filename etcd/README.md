@@ -1,6 +1,6 @@
 # etcd
 
-![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.5.29](https://img.shields.io/badge/AppVersion-v3.5.29-informational?style=flat-square)
+![Version: 0.1.7](https://img.shields.io/badge/Version-0.1.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.6.11](https://img.shields.io/badge/AppVersion-v3.6.11-informational?style=flat-square)
 
 Production-ready etcd cluster with S3 backup support
 
@@ -15,6 +15,14 @@ Production-ready etcd cluster with S3 backup support
 ## Source Code
 
 * <https://github.com/etcd-io/etcd>
+
+## Upgrading
+
+### From v3.5.x to v3.6.x
+
+Upgrading etcd from v3.5 to v3.6 is a **breaking change** that requires following the official upgrade procedure. Do not simply update the image tag on a running cluster.
+
+Please read the [etcd v3.6 upgrade guide](https://etcd.io/docs/v3.6/upgrades/upgrade_3_6/) before upgrading.
 
 ## Values
 

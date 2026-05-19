@@ -61,7 +61,7 @@ spec:
               mountPath: /etcdctl-bin
           containers:
           - name: etcd-backup
-            image: amazon/aws-cli:2.34.23
+            image: amazon/aws-cli:2.34.49
             imagePullPolicy: IfNotPresent
             command: ["/bin/sh", "/scripts/backup.sh"]
             securityContext:
