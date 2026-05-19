@@ -4,6 +4,38 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: Update etcd to v3.6.11, aws-cli to 2.34.49
+        - kind: breaking-change
+          description: Upgrading from v3.5 to v3.6 requires following the etcd upgrade guide
+          links:
+            - name: Upgrade guide
+              url: https://etcd.io/docs/v3.6/upgrades/upgrade_3_6/
+    apiVersion: v2
+    appVersion: v3.6.11
+    created: "2026-05-19T08:08:00.143685198Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: 3bc9a3778e95c24b37310eeb417c46f536c2e735614ddc90a494f7db7846f9b8
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.7/etcd-0.1.7.tgz
+    version: 0.1.7
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Update etcd to v3.5.29, alpine to 3.23, aws-cli to 2.34.23
     apiVersion: v2
     appVersion: v3.5.29
@@ -198,6 +230,34 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: Update homepage to v1.13.1
+    apiVersion: v2
+    appVersion: v1.13.1
+    created: "2026-05-19T08:08:00.295505479Z"
+    description: A modern, fully static, fast, secure fully proxied, highly customizable
+      application dashboard with integrations for over 100 services and translations
+      into multiple languages.
+    digest: c24afa50127466062ca08dcfd88c9ff25daa3e2eb158526d29aa822deea31be2
+    home: https://github.com/gethomepage/homepage
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
+    keywords:
+    - homepage
+    - dashboard
+    - docker
+    - kubernetes
+    - services
+    maintainers:
+    - name: UnknownIQ
+    name: homepage
+    sources:
+    - https://github.com/gethomepage/homepage
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.8.4/homepage-1.8.4.tgz
+    version: 1.8.4
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Update homepage to v1.12.3
     apiVersion: v2
     appVersion: v1.12.3
@@ -368,6 +428,37 @@ entries:
     - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.7.1/homepage-1.7.1.tgz
     version: 1.7.1
   searxng:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: fixed
+          description: Update searxng to 2026.5.17-d7e8b7cd1, valkey to 0.9.4
+    apiVersion: v2
+    appVersion: 2026.5.17-d7e8b7cd1
+    created: "2026-05-19T08:08:00.478583779Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm/
+      version: 0.9.4
+    description: A privacy-respecting, hackable metasearch engine that aggregates
+      results from various search services without tracking users.
+    digest: da1fc4904daa64edb0b32e36234aaffe7dc71200bd91e562ef8c7b11eb7fa933
+    home: https://github.com/searxng/searxng
+    icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
+    keywords:
+    - searxng
+    - search
+    - metasearch
+    - privacy
+    maintainers:
+    - name: UnknownIQ
+    name: searxng
+    sources:
+    - https://github.com/searxng/searxng
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.11/searxng-0.1.11.tgz
+    version: 0.1.11
   - annotations:
       artifacthub.io/changes: |
         - kind: fixed
@@ -685,4 +776,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-03T14:49:33.246849377Z"
+generated: "2026-05-19T08:08:00.478638591Z"
