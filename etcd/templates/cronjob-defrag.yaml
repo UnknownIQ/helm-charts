@@ -27,89 +27,43 @@ spec:
           restartPolicy: OnFailure
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1001
-            runAsGroup: 1001
-            fsGroup: 1001
-          initContainers:
-          - name: download-etcdctl
-            image: busybox:1.37
-            imagePullPolicy: IfNotPresent
-            command:
-            - /bin/sh
-            - -ec
-            - |
-              ETCD_VER={{ .Values.image.tag | default .Chart.AppVersion }}
-              DOWNLOAD_URL=https://github.com/etcd-io/etcd/releases/download
-              echo "Downloading etcdctl ${ETCD_VER}..."
-              wget -q ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -O /tmp/etcd.tar.gz
-              tar xzf /tmp/etcd.tar.gz -C /tmp --strip-components=1
-              cp /tmp/etcdctl /etcdctl-bin/etcdctl
-              chmod +x /etcdctl-bin/etcdctl
-              rm -rf /tmp/etcd*
-              echo "etcdctl downloaded successfully"
-            securityContext:
-              runAsNonRoot: true
-              runAsUser: 1001
-              runAsGroup: 1001
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                - ALL
-              readOnlyRootFilesystem: false
-            volumeMounts:
-            - name: etcdctl-bin
-              mountPath: /etcdctl-bin
           containers:
           - name: etcd-defrag
-            image: alpine:3.23
-            imagePullPolicy: IfNotPresent
+            image: {{ include "etcd.image" . }}
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
             command:
-            - /bin/sh
-            - -ec
-            - |
-              echo "Starting etcd defragmentation..."
-
-              {{- $fullname := include "etcd.fullname" . }}
-              {{- $protocol := include "etcd.clientProtocol" . }}
-              {{- if .Values.tls.enabled }}
-              ETCDCTL_OPTS="--cacert=/tls/client/{{ .Values.tls.client.caFilename }} --cert=/tls/client/{{ .Values.tls.client.certFilename }} --key=/tls/client/{{ .Values.tls.client.keyFilename }}"
-              {{- else }}
-              ETCDCTL_OPTS=""
-              {{- end }}
-
-              {{- range $i := until (int .Values.replicaCount) }}
-              echo "Defragmenting {{ $fullname }}-{{ $i }}..."
-              ETCDCTL_API=3 /etcdctl-bin/etcdctl \
-                --endpoints={{ $protocol }}://{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless:{{ $.Values.service.clientPort }} \
-                ${ETCDCTL_OPTS} \
-                defrag --command-timeout=60s
-
-              echo "Waiting 10 seconds before next member..."
-              sleep 10
-              {{- end }}
-
-              echo "Defragmentation completed for all members!"
+            - etcdctl
+            - defrag
+            {{- $fullname := include "etcd.fullname" . }}
+            {{- $protocol := include "etcd.clientProtocol" . }}
+            {{- range $i := until (int .Values.replicaCount) }}
+            - --endpoints={{ $protocol }}://{{ $fullname }}-{{ $i }}.{{ $fullname }}-headless:{{ $.Values.service.clientPort }}
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - --cacert=/tls/client/{{ .Values.tls.client.caFilename }}
+            - --cert=/tls/client/{{ .Values.tls.client.certFilename }}
+            - --key=/tls/client/{{ .Values.tls.client.keyFilename }}
+            {{- end }}
+            - --command-timeout=60s
+            env:
+            - name: ETCDCTL_API
+              value: "3"
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                 - ALL
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
             resources:
               {{- toYaml .Values.defrag.resources | nindent 14 }}
-            volumeMounts:
-            - name: etcdctl-bin
-              mountPath: /etcdctl-bin
-              readOnly: true
             {{- if .Values.tls.enabled }}
+            volumeMounts:
             - name: tls-client
               mountPath: /tls/client
               readOnly: true
             {{- end }}
-          volumes:
-          - name: etcdctl-bin
-            emptyDir: {}
           {{- if .Values.tls.enabled }}
+          volumes:
           - name: tls-client
             secret:
               secretName: {{ .Values.tls.client.existingSecret | default (printf "%s-client-tls" (include "etcd.fullname" .)) }}

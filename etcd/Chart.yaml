@@ -2,7 +2,7 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.7
+version: 0.1.8
 appVersion: "v3.6.11"
 keywords:
   - etcd
@@ -20,10 +20,4 @@ icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Update etcd to v3.6.11, aws-cli to 2.34.49
-    - kind: changed
-      description: Upgrading from v3.5 to v3.6 requires following the etcd upgrade guide
-      breaking: true
-      links:
-        - name: Upgrade guide
-          url: https://etcd.io/docs/v3.6/upgrades/upgrade_3_6/
+      description: Defrag job now uses the etcd image directly (rootless, OpenShift compatible), dropping alpine and busybox

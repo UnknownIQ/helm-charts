@@ -1,6 +1,6 @@
 # etcd
 
-![Version: 0.1.7](https://img.shields.io/badge/Version-0.1.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.6.11](https://img.shields.io/badge/AppVersion-v3.6.11-informational?style=flat-square)
+![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.6.11](https://img.shields.io/badge/AppVersion-v3.6.11-informational?style=flat-square)
 
 Production-ready etcd cluster with S3 backup support
 
