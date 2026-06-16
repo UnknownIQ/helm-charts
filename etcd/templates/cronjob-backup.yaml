@@ -26,10 +26,7 @@ spec:
           serviceAccountName: {{ include "etcd.serviceAccountName" . }}
           restartPolicy: OnFailure
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
-            runAsGroup: 1001
-            fsGroup: 1001
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
           initContainers:
           - name: download-etcdctl
             image: busybox:1.37

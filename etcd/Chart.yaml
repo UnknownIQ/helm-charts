@@ -2,7 +2,7 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.8
+version: 0.1.9
 appVersion: "v3.6.11"
 keywords:
   - etcd
@@ -20,4 +20,4 @@ icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Defrag job now uses the etcd image directly (rootless, OpenShift compatible), dropping alpine and busybox
+      description: CronJob pod security context now uses podSecurityContext values (consistent with StatefulSet, user-overridable)

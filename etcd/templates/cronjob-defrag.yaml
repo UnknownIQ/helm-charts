@@ -26,7 +26,7 @@ spec:
           serviceAccountName: {{ include "etcd.serviceAccountName" . }}
           restartPolicy: OnFailure
           securityContext:
-            runAsNonRoot: true
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
           containers:
           - name: etcd-defrag
             image: {{ include "etcd.image" . }}
