@@ -4,6 +4,33 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: CronJob pod security context now uses podSecurityContext values (consistent with StatefulSet, user-overridable)
+    apiVersion: v2
+    appVersion: v3.6.11
+    created: "2026-06-16T10:08:56.224568713Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: a4557f4a4e0c6a83be0b057b4e588d7d03fcd625e30ab3a33d6f1aa330115c17
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.9/etcd-0.1.9.tgz
+    version: 0.1.9
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Defrag job now uses the etcd image directly (rootless, OpenShift compatible), dropping alpine and busybox
     apiVersion: v2
     appVersion: v3.6.11
@@ -803,4 +830,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-10T08:02:36.326681979Z"
+generated: "2026-06-16T10:08:56.540374364Z"
