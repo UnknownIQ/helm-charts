@@ -68,3 +68,15 @@ jobs:
           skip_packaging: true
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Ensure .nojekyll on gh-pages
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          if [ ! -f .nojekyll ]; then
+            touch .nojekyll
+            git add .nojekyll
+            git commit -m "ci: ensure .nojekyll to disable Jekyll on gh-pages"
+            git push origin gh-pages
+          fi
+          git checkout main
