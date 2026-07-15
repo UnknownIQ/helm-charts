@@ -1,6 +1,7 @@
 # etcd
 
 ![Version: 0.1.9](https://img.shields.io/badge/Version-0.1.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v3.6.11](https://img.shields.io/badge/AppVersion-v3.6.11-informational?style=flat-square)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/unknowniq)](https://artifacthub.io/packages/helm/unknowniq/etcd)
 
 Production-ready etcd cluster with S3 backup support
 

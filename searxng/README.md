@@ -1,6 +1,7 @@
 # searxng
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.4.3-53141be38](https://img.shields.io/badge/AppVersion-2026.4.3--53141be38-informational?style=flat-square)
+![Version: 0.1.11](https://img.shields.io/badge/Version-0.1.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2026.5.17-d7e8b7cd1](https://img.shields.io/badge/AppVersion-2026.5.17--d7e8b7cd1-informational?style=flat-square)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/unknowniq)](https://artifacthub.io/packages/helm/unknowniq/searxng)
 
 A privacy-respecting, hackable metasearch engine that aggregates results from various search services without tracking users.
 
@@ -20,7 +21,7 @@ A privacy-respecting, hackable metasearch engine that aggregates results from va
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://valkey-io.github.io/valkey-helm/ | valkey | 0.9.3 |
+| https://valkey-io.github.io/valkey-helm/ | valkey | 0.9.4 |
 
 ## Values
 
