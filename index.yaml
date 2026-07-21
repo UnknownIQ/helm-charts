@@ -59,7 +59,8 @@ entries:
       artifacthub.io/changes: |
         - kind: changed
           description: Update etcd to v3.6.11, aws-cli to 2.34.49
-        - kind: breaking-change
+        - kind: changed
+          breaking: true
           description: Upgrading from v3.5 to v3.6 requires following the etcd upgrade guide
           links:
             - name: Upgrade guide
@@ -441,7 +442,7 @@ entries:
       into multiple languages.
     digest: 844b568d6e97c7347f0f9d3dc416da4c5fc60eaea428aba3820f4da91ccbd64a
     home: https://github.com/gethomepage/homepage
-    icon: https://github.com/gethomepage/homepage/raw/main/public/homepage.png
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
     keywords:
     - homepage
     - dashboard
@@ -465,7 +466,7 @@ entries:
       into multiple languages.
     digest: da683b82190ad0343177cac730376a0af57aca8c1589cf29e3dfca24cc480884
     home: https://github.com/gethomepage/homepage
-    icon: https://github.com/gethomepage/homepage/raw/main/public/homepage.png
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
     keywords:
     - homepage
     - dashboard
