@@ -4,6 +4,33 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: Update etcd to v3.6.13, aws-cli to 2.36.4
+    apiVersion: v2
+    appVersion: v3.6.13
+    created: "2026-07-21T15:12:32.744646227Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: 67916a07e9457d5787d294fabb0acde6d532cf57e026a9bb3170d56fede74ce3
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.10/etcd-0.1.10.tgz
+    version: 0.1.10
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: CronJob pod security context now uses podSecurityContext values (consistent with StatefulSet, user-overridable)
     apiVersion: v2
     appVersion: v3.6.11
@@ -285,6 +312,34 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: Update homepage to v1.13.2
+    apiVersion: v2
+    appVersion: v1.13.2
+    created: "2026-07-21T15:12:32.909252178Z"
+    description: A modern, fully static, fast, secure fully proxied, highly customizable
+      application dashboard with integrations for over 100 services and translations
+      into multiple languages.
+    digest: 39b609c1b80ee3a5ef1a64988707ad30530a236e3d10e17537ea915448330825
+    home: https://github.com/gethomepage/homepage
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
+    keywords:
+    - homepage
+    - dashboard
+    - docker
+    - kubernetes
+    - services
+    maintainers:
+    - name: UnknownIQ
+    name: homepage
+    sources:
+    - https://github.com/gethomepage/homepage
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.8.5/homepage-1.8.5.tgz
+    version: 1.8.5
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Update homepage to v1.13.1
     apiVersion: v2
     appVersion: v1.13.1
@@ -483,6 +538,37 @@ entries:
     - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.7.1/homepage-1.7.1.tgz
     version: 1.7.1
   searxng:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: fixed
+          description: Update searxng to 2026.7.19-6da6eee26, busybox to 1.38.0
+    apiVersion: v2
+    appVersion: 2026.7.19-6da6eee26
+    created: "2026-07-21T15:12:33.08260048Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm/
+      version: 0.9.4
+    description: A privacy-respecting, hackable metasearch engine that aggregates
+      results from various search services without tracking users.
+    digest: 6f1ce2f54b2bab8cf92ce40d49fd21cf1b14e280ae8a7100c5a9bb3becb0d85a
+    home: https://github.com/searxng/searxng
+    icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
+    keywords:
+    - searxng
+    - search
+    - metasearch
+    - privacy
+    maintainers:
+    - name: UnknownIQ
+    name: searxng
+    sources:
+    - https://github.com/searxng/searxng
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.12/searxng-0.1.12.tgz
+    version: 0.1.12
   - annotations:
       artifacthub.io/changes: |
         - kind: fixed
@@ -831,4 +917,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-16T10:08:56.540374364Z"
+generated: "2026-07-21T15:12:33.082737152Z"
