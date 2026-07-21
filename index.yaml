@@ -69,7 +69,7 @@ entries:
     appVersion: v3.6.11
     created: "2026-05-19T08:08:00.143685198Z"
     description: Production-ready etcd cluster with S3 backup support
-    digest: 3bc9a3778e95c24b37310eeb417c46f536c2e735614ddc90a494f7db7846f9b8
+    digest: f296b247f33d8da74f2ce8b8f73197d88df591fc5727bf4fe3cd5f1cca40b75a
     home: https://etcd.io/
     icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
     keywords:
