@@ -2,8 +2,8 @@ apiVersion: v2
 name: homepage
 description: A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
 type: application
-version: 1.8.4
-appVersion: "v1.13.1"
+version: 1.8.5
+appVersion: "v1.13.2"
 keywords:
   - homepage
   - dashboard
@@ -19,4 +19,4 @@ icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-3
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Update homepage to v1.13.1
+      description: Update homepage to v1.13.2

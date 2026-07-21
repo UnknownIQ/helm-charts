@@ -9,7 +9,7 @@ image:
 initContainerImage:
   repository: busybox
   pullPolicy: IfNotPresent
-  tag: "1.37"
+  tag: "1.38.0"
 
 imagePullSecrets: []
 nameOverride: ""

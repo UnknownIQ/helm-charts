@@ -2,8 +2,8 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.9
-appVersion: "v3.6.11"
+version: 0.1.10
+appVersion: "v3.6.13"
 keywords:
   - etcd
   - database
@@ -20,4 +20,4 @@ icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: CronJob pod security context now uses podSecurityContext values (consistent with StatefulSet, user-overridable)
+      description: Update etcd to v3.6.13, aws-cli to 2.36.4
