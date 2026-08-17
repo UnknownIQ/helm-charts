@@ -4,6 +4,34 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          breaking: true
+          description: Update etcd to v3.7.1 (major upgrade — follow v3.7 upgrade guide), aws-cli to 2.36.24, busybox to 1.38.0
+    apiVersion: v2
+    appVersion: v3.7.1
+    created: "2026-08-17T20:30:23.757535828Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: 3765709f16806ae709e9931b1ec702e13e8e1eb6766956b76b1db0a76f02092c
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.12/etcd-0.1.12.tgz
+    version: 0.1.12
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Update etcd to v3.6.14, aws-cli to 2.36.24, busybox to 1.38.0
     apiVersion: v2
     appVersion: v3.6.14
@@ -336,6 +364,35 @@ entries:
     - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.0/etcd-0.1.0.tgz
     version: 0.1.0
   homepage:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          breaking: true
+          description: Update homepage to v2.0.0 (major release with new built-in auth system); add optional auth.yaml config support
+    apiVersion: v2
+    appVersion: v2.0.0
+    created: "2026-08-17T20:30:23.971801853Z"
+    description: A modern, fully static, fast, secure fully proxied, highly customizable
+      application dashboard with integrations for over 100 services and translations
+      into multiple languages.
+    digest: adf6da17a4035d0cc39a10d9c92a4f30df34ff19ed66ea2b6edaa080cdd43e46
+    home: https://github.com/gethomepage/homepage
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
+    keywords:
+    - homepage
+    - dashboard
+    - docker
+    - kubernetes
+    - services
+    maintainers:
+    - name: UnknownIQ
+    name: homepage
+    sources:
+    - https://github.com/gethomepage/homepage
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.8.7/homepage-1.8.7.tgz
+    version: 1.8.7
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
@@ -1004,4 +1061,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-17T20:20:16.085209191Z"
+generated: "2026-08-17T20:30:24.143464359Z"
