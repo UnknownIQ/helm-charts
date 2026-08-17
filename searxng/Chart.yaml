@@ -2,8 +2,8 @@ apiVersion: v2
 name: searxng
 description: A privacy-respecting, hackable metasearch engine that aggregates results from various search services without tracking users.
 type: application
-version: 0.1.12
-appVersion: "2026.7.19-6da6eee26"
+version: 0.1.13
+appVersion: "2026.8.17-374939b88"
 keywords:
   - searxng
   - search
@@ -17,10 +17,10 @@ maintainers:
 icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
 annotations:
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Update searxng to 2026.7.19-6da6eee26, busybox to 1.38.0
+    - kind: changed
+      description: Update searxng to 2026.8.17-374939b88, valkey chart to 0.11.0
 dependencies:
   - name: valkey
-    version: "0.9.4"
+    version: "0.11.0"
     repository: https://valkey-io.github.io/valkey-helm/
     condition: valkey.enabled

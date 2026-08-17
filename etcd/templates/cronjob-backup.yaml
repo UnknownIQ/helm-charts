@@ -29,7 +29,7 @@ spec:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
           initContainers:
           - name: download-etcdctl
-            image: busybox:1.37
+            image: busybox:1.38.0
             imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
@@ -58,7 +58,7 @@ spec:
               mountPath: /etcdctl-bin
           containers:
           - name: etcd-backup
-            image: amazon/aws-cli:2.36.4
+            image: amazon/aws-cli:2.36.24
             imagePullPolicy: IfNotPresent
             command: ["/bin/sh", "/scripts/backup.sh"]
             securityContext:
