@@ -1,6 +1,7 @@
 # homepage
 
-![Version: 1.8.3](https://img.shields.io/badge/Version-1.8.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.12.3](https://img.shields.io/badge/AppVersion-v1.12.3-informational?style=flat-square)
+![Version: 1.8.7](https://img.shields.io/badge/Version-1.8.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.0.0](https://img.shields.io/badge/AppVersion-v2.0.0-informational?style=flat-square)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/package/helm/unknowniq/homepage)](https://artifacthub.io/packages/helm/unknowniq/homepage)
 
 A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
 
@@ -15,6 +16,22 @@ A modern, fully static, fast, secure fully proxied, highly customizable applicat
 ## Source Code
 
 * <https://github.com/gethomepage/homepage>
+
+## Authentication (v2.0.0+)
+
+Homepage v2.0.0 introduced a built-in authentication system. It is **opt-in** — existing deployments without `config.auth` continue to work unchanged.
+
+To enable authentication, set `config.auth` in your values:
+
+```yaml
+config:
+  auth:
+    providers:
+      credentials:
+        users:
+          - username: admin
+            password: "$$2b$$12$$..."  # bcrypt hash; double $ to escape in Helm
+```
 
 ## Values
 

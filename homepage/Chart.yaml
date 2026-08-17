@@ -2,7 +2,7 @@ apiVersion: v2
 name: homepage
 description: A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
 type: application
-version: 1.8.6
+version: 1.8.7
 appVersion: "v2.0.0"
 keywords:
   - homepage
@@ -20,4 +20,4 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       breaking: true
-      description: Update homepage to v2.0.0 (major release with new built-in auth system)
+      description: Update homepage to v2.0.0 (major release with new built-in auth system); add optional auth.yaml config support

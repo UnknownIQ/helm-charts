@@ -1,6 +1,6 @@
 {{ template "chart.header" . }}
 {{ template "chart.badgesSection" . }}
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/unknowniq)](https://artifacthub.io/packages/helm/unknowniq/etcd)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/package/helm/unknowniq/etcd)](https://artifacthub.io/packages/helm/unknowniq/etcd)
 
 {{ template "chart.description" . }}
 
@@ -11,6 +11,12 @@
 {{ template "chart.sourcesSection" . }}
 
 ## Upgrading
+
+### From v3.6.x to v3.7.x
+
+Upgrading etcd from v3.6 to v3.7 is a **breaking change**. v3.7 removes all `--experimental-*` flags and the v2 store/API (`--enable-v2`). You must be on v3.6.11+ before upgrading.
+
+Please read the [etcd v3.7 upgrade guide](https://etcd.io/docs/v3.7/upgrades/upgrade_3_7/) before upgrading.
 
 ### From v3.5.x to v3.6.x
 

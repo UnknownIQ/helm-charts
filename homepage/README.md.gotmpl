@@ -1,0 +1,31 @@
+{{ template "chart.header" . }}
+{{ template "chart.badgesSection" . }}
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/package/helm/unknowniq/homepage)](https://artifacthub.io/packages/helm/unknowniq/homepage)
+
+{{ template "chart.description" . }}
+
+**Homepage:** <{{ template "chart.homepage" . }}>
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## Authentication (v2.0.0+)
+
+Homepage v2.0.0 introduced a built-in authentication system. It is **opt-in** — existing deployments without `config.auth` continue to work unchanged.
+
+To enable authentication, set `config.auth` in your values:
+
+```yaml
+config:
+  auth:
+    providers:
+      credentials:
+        users:
+          - username: admin
+            password: "$$2b$$12$$..."  # bcrypt hash; double $ to escape in Helm
+```
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

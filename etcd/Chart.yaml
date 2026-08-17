@@ -2,8 +2,8 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.11
-appVersion: "v3.6.14"
+version: 0.1.12
+appVersion: "v3.7.1"
 keywords:
   - etcd
   - database
@@ -20,4 +20,5 @@ icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Update etcd to v3.6.14, aws-cli to 2.36.24, busybox to 1.38.0
+      breaking: true
+      description: Update etcd to v3.7.1 (major upgrade — follow v3.7 upgrade guide), aws-cli to 2.36.24, busybox to 1.38.0

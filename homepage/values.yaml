@@ -116,6 +116,15 @@ config:
   docker: {}
   settings:
     disableHostValidation: true
+  # auth.yaml configuration for homepage v2.0.0+ built-in authentication (opt-in).
+  # Uncomment and configure to enable. Password must be a bcrypt hash.
+  # Note: double $ signs ($$) are required to escape Helm template rendering.
+  # auth:
+  #   providers:
+  #     credentials:
+  #       users:
+  #         - username: admin
+  #           password: "$$2b$$12$$examplehashhere"
 
 customCss: ""
 customJs: ""

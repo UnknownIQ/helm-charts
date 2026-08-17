@@ -39,6 +39,10 @@ data:
     {{- else }}
     {}
     {{- end }}
+  {{- if .Values.config.auth }}
+  auth.yaml: |
+    {{- toYaml .Values.config.auth | nindent 4 }}
+  {{- end }}
 ---
 {{- if or .Values.customCss .Values.customJs }}
 apiVersion: v1
