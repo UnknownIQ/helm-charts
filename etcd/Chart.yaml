@@ -2,7 +2,7 @@ apiVersion: v2
 name: etcd
 description: Production-ready etcd cluster with S3 backup support
 type: application
-version: 0.1.12
+version: 0.1.13
 appVersion: "v3.7.1"
 keywords:
   - etcd
@@ -21,4 +21,4 @@ annotations:
   artifacthub.io/changes: |
     - kind: changed
       breaking: true
-      description: Update etcd to v3.7.1 (major upgrade — follow v3.7 upgrade guide), aws-cli to 2.36.24, busybox to 1.38.0
+      description: Update aws-cli to 2.36.41

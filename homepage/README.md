@@ -1,6 +1,6 @@
 # homepage
 
-![Version: 1.8.7](https://img.shields.io/badge/Version-1.8.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.0.0](https://img.shields.io/badge/AppVersion-v2.0.0-informational?style=flat-square)
+![Version: 1.8.8](https://img.shields.io/badge/Version-1.8.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v2.2.0](https://img.shields.io/badge/AppVersion-v2.2.0-informational?style=flat-square)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/package/helm/unknowniq/homepage)](https://artifacthub.io/packages/helm/unknowniq/homepage)
 
 A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages.
