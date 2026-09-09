@@ -5,6 +5,34 @@ entries:
       artifacthub.io/changes: |
         - kind: changed
           breaking: true
+          description: Update aws-cli to 2.36.41
+    apiVersion: v2
+    appVersion: v3.7.1
+    created: "2026-09-09T07:59:32.01223892Z"
+    description: Production-ready etcd cluster with S3 backup support
+    digest: 060f43d0766b1556647bf3542b68f2d742c3f48e561858ca8db6ea5be0be3b5d
+    home: https://etcd.io/
+    icon: https://raw.githubusercontent.com/etcd-io/etcd/main/logos/etcd-horizontal-color.svg
+    keywords:
+    - etcd
+    - database
+    - key-value
+    - distributed
+    - backup
+    - s3
+    maintainers:
+    - name: UnknownIQ
+    name: etcd
+    sources:
+    - https://github.com/etcd-io/etcd
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/etcd-0.1.13/etcd-0.1.13.tgz
+    version: 0.1.13
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          breaking: true
           description: Update etcd to v3.7.1 (major upgrade — follow v3.7 upgrade guide), aws-cli to 2.36.24, busybox to 1.38.0
     apiVersion: v2
     appVersion: v3.7.1
@@ -368,6 +396,35 @@ entries:
       artifacthub.io/changes: |
         - kind: changed
           breaking: true
+          description: Update homepage to v2.2.0
+    apiVersion: v2
+    appVersion: v2.2.0
+    created: "2026-09-09T07:59:32.168601682Z"
+    description: A modern, fully static, fast, secure fully proxied, highly customizable
+      application dashboard with integrations for over 100 services and translations
+      into multiple languages.
+    digest: 8a96f09f70c753c2ffd6e1076b44735bdd96574ebde3537f93365b74638b314b
+    home: https://github.com/gethomepage/homepage
+    icon: https://raw.githubusercontent.com/gethomepage/homepage/dev/public/mstile-310x310.png
+    keywords:
+    - homepage
+    - dashboard
+    - docker
+    - kubernetes
+    - services
+    maintainers:
+    - name: UnknownIQ
+    name: homepage
+    sources:
+    - https://github.com/gethomepage/homepage
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.8.8/homepage-1.8.8.tgz
+    version: 1.8.8
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          breaking: true
           description: Update homepage to v2.0.0 (major release with new built-in auth system); add optional auth.yaml config support
     apiVersion: v2
     appVersion: v2.0.0
@@ -651,6 +708,37 @@ entries:
     - https://github.com/UnknownIQ/helm-charts/releases/download/homepage-1.7.1/homepage-1.7.1.tgz
     version: 1.7.1
   searxng:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: Update searxng to 2026.9.8-3fdc6d753, valkey chart to 0.12.0
+    apiVersion: v2
+    appVersion: 2026.9.8-3fdc6d753
+    created: "2026-09-09T07:59:32.347581778Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey-io.github.io/valkey-helm/
+      version: 0.12.0
+    description: A privacy-respecting, hackable metasearch engine that aggregates
+      results from various search services without tracking users.
+    digest: 3c29f46c7fff4aacf756aff66d857e75643f09031bedd654dae9df5ac8f2f9ef
+    home: https://github.com/searxng/searxng
+    icon: https://raw.githubusercontent.com/searxng/searxng/master/client/simple/src/brand/searxng.svg
+    keywords:
+    - searxng
+    - search
+    - metasearch
+    - privacy
+    maintainers:
+    - name: UnknownIQ
+    name: searxng
+    sources:
+    - https://github.com/searxng/searxng
+    type: application
+    urls:
+    - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.14/searxng-0.1.14.tgz
+    version: 0.1.14
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
@@ -1061,4 +1149,4 @@ entries:
     urls:
     - https://github.com/UnknownIQ/helm-charts/releases/download/searxng-0.1.0/searxng-0.1.0.tgz
     version: 0.1.0
-generated: "2026-08-17T20:30:24.143464359Z"
+generated: "2026-09-09T07:59:32.347726452Z"
